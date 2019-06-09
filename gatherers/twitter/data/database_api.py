@@ -20,6 +20,7 @@ class Mongo_API(metaclass=Singleton):
             Tweets.objects(id=tweet_id).update_one(set__user_name=user_name)
         if(date is not None):
             Tweets.objects(id=tweet_id).update_one(set__date=date)
+        Tweets.objects(id = tweet_id).update_one(set__parsed = True)
 
     def get_tweets(self, dataset_name : str = None, limit : int = 100):
         if dataset_name is None:
@@ -27,11 +28,11 @@ class Mongo_API(metaclass=Singleton):
         else:
             return Tweets.objects(dataset_name = dataset_name)
 
-    def get_parsable_tweet_id(self, dataset_name: str = None, parsed: bool = False):
+    def get_parsable_tweet_id(self, dataset_name: str = None, parsed: bool = False, skip : int = 0):
         if dataset_name is None:
-            return Tweets.objects(parsed=parsed).only('id')[:1]
+            return Tweets.objects(parsed=parsed, parsable=True).only('id').skip(skip).first()['id']
         else:
-            return Tweets.objects(dataset_name=dataset_name)
+            return Tweets.objects(dataset_name=dataset_name, parsed=parsed, parsable=True).only('id').skip(skip).first()['id']
 
     def mark_unparseable(self, tweet_id : int):
         Tweets.objects(id = tweet_id).update_one(set__parsable = False)

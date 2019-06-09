@@ -6,7 +6,7 @@ class Tweets(Document):
     dataset_name = StringField(required=True)
     label = StringField(required=True)
     parsed = BooleanField(required=True, default=False)
-    parsable = BooleanField(required=True, default=False)
+    parsable = BooleanField(required=True, default=True)
 
     user_name = StringField(required=False)
     tweet_body = StringField(required=False)

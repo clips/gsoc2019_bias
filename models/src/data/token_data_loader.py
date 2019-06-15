@@ -5,32 +5,21 @@ import pandas as pd
 import numpy as np
 
 class Token_Dataset(Dataset):
-    def __init__(self, frame : pd.DataFrame):
+    def __init__(self, frame : pd.DataFrame, sparse = True):
         self.texts = frame["texts"]
-        self.labels = frame["labels"]
+        self.labels = frame["labels"].astype('category')
+        self.num_labels = self.labels.cat.codes
 
-        self.token_texts = None
-        self.categoritcal_labels = None
 
-        self._make_tokenizer()
-        self._tokenize_texts()
-        self._categorize_labels()
-
+        self.tokenizer = TfidfVectorizer(strip_accents='unicode', stop_words='english', max_df=0.97, min_df=0.03)
+        self.token_texts = self.tokenizer.fit_transform(self.texts)
+        if not sparse: self.token_texts = self.token_texts.toarray()
 
     def __len__(self):
         return len(self.labels)
 
     def __getitem__(self, index):
         return self.token_texts[index], self.labels[index]
-
-    def _make_tokenizer(self):
-        self.tokenizer = TfidfVectorizer(strip_accents='unicode', stop_words='english', max_df=0.97, min_df=0.03)
-
-    def _tokenize_texts(self):
-        self.token_texts = self.tokenizer.fit_transform(self.texts)
-
-    def _categorize_labels(self):
-        pass
 
 def get_token_dataset():
     pass

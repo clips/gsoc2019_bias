@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 
+# HTML parse for raw tweets using beautiful soup, tries to match the tweet body as well as the username and date with
+# HTML filters, this implementation is relatively flimsy, and thus for projects with a greater lifespan the twitter API
+# should be used.
 def parse_tweet(tweet : str):
     soup = BeautifulSoup(tweet, 'html.parser')
     try:

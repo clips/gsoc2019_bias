@@ -2,10 +2,11 @@ import pandas as pd
 
 from gatherers.twitter.data.database_api import Mongo_API
 
-
+# Load a csv from a comma delimited file
 def load_from_file(file_name):
     return pd.read_csv(file_name, delimiter=',')
 
+# Add the loaded tweets into the database, marked as parsable and unparsed
 def add_unparsed_tweets_to_database(file_name, dataset_name = None):
     if dataset_name is None: dataset_name = file_name
     tweets = load_from_file(file_name)

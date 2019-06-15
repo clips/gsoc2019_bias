@@ -1,3 +1,5 @@
+
+# Simple, not thread safe singleton implementation, used for the database api in order to utilize the same connection
 class Singleton(type):
     _instances = {}
     def __call__(self, *args, **kwargs):

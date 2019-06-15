@@ -1,5 +1,7 @@
 from mongoengine import *
 
+# The tweet object document mapping, contains both content fields (Tweet body, username, date) as well as metadata such
+# as in which dataset it was contained, what labels it has and its own parsing status
 class Tweets(Document):
     id = LongField(primary_key=True)
 

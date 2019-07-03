@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class classifier(ABC):
+class Classifier(ABC):
     @abstractmethod
     def save_model(self, filename : str):
         pass

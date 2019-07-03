@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from torch.utils.data import Dataset
 
-class persistent_dataset(ABC, Dataset):
+class PersistentDataset(ABC, Dataset):
     @abstractmethod
     def load_data(self, filename):
         pass

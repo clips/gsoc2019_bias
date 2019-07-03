@@ -7,8 +7,7 @@ import numpy as np
 
 from models.src.utils.tensor_utils import convert_sparse_matrix_to_sparse_tensor
 
-
-class Token_Dataset(Dataset):
+class TokenDataset(Dataset):
     def __init__(self, frame: pd.DataFrame, min_df=5, sparse=True, tokenizer = None):
         self.texts = frame["texts"]
         self.labels = frame["labels"].astype('category')

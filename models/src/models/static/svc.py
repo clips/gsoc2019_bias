@@ -1,11 +1,14 @@
 import time
+
+import pandas
+from sklearn.metrics import f1_score
 from sklearn.svm import LinearSVC
 import joblib
 
-from models.src.data.idf_dataset import get_token_dataset
-from models.src.models.model import classifier
+from models.src.data.idf_dataset import IDFDataset
+from models.src.models.model import Classifier
 
-class SVM_Wrapper(classifier):
+class SVM_Wrapper(Classifier):
     def __init__(self, C=1, loss='hinge', penalty='l2', max_iter=10000):
         self.classifier = LinearSVC(C=C, loss=loss, penalty=penalty, max_iter=max_iter)
         self.training_time = None
@@ -34,8 +37,19 @@ class SVM_Wrapper(classifier):
             return self.training_time
 
 if __name__ == "__main__":
-    train_set, test_set = get_token_dataset()
+    print("Loading file")
+    frame = pandas.read_csv("hatespeech-data.csv", sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
 
+    print("Tokenizing data")
+    dataset = IDFDataset()
+    dataset.load_data(frame, 0.25)
+    tokens, labels = dataset.get_train_dataset()
+    test_tokens, test_labels = dataset.get_test_dataset()
+
+    print("Training classifier")
     svm = SVM_Wrapper()
-    svm.train(train_set.token_texts, train_set.num_labels)
+    svm.train(tokens, labels)
+    predicted = svm.predict(test_tokens)
+    print("Accuracy {}".format(svm.classifier.score(test_tokens, test_labels)))
+    print("F1 Score {}".format(f1_score(test_labels, predicted, average='weighted')))
     svm.save_model("SVMModel.pk")

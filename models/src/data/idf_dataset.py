@@ -38,12 +38,18 @@ class IDFDataset(PersistentDataset):
             test = pandas.read_csv(test_filename + '.csv', sep='\t', header=None, names=["texts", "labels"], usecols=(0, 1))
             self._process_data(train, test)
 
-    def get_train_dataset(self) -> Dataset:
+    def get_train_dataset(self):
+        return self.train_tokens, self.train_labels
+
+    def get_test_dataset(self):
+        return self.test_tokens, self.test_labels
+
+    def get_train_dataset_torch(self) -> Dataset:
         input_tensor = convert_sparse_matrix_to_tensor(self.train_tokens)
         label_tensor = torch.LongTensor(self.train_labels)
         return TensorDataset(input_tensor, label_tensor)
 
-    def get_test_dataset(self) -> Dataset:
+    def get_test_dataset_torch(self) -> Dataset:
         input_tensor = convert_sparse_matrix_to_tensor(self.train_tokens)
         label_tensor = torch.LongTensor(self.train_labels)
         return TensorDataset(input_tensor, label_tensor)

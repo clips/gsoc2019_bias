@@ -7,7 +7,7 @@ import pandas
 from models.src.data.persistent_dataset import PersistentDataset
 from models.src.utils.sparse_utils import save_sparse_csr, load_sparse_csr, convert_sparse_matrix_to_tensor
 
-class TokenDataset(PersistentDataset):
+class IDFDataset(PersistentDataset):
     def __init__(self):
         self.data, self.train_tokens, self.test_tokens = None, None, None
         self.train_labels, self.test_labels = None, None

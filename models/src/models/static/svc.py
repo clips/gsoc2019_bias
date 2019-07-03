@@ -2,7 +2,7 @@ import time
 from sklearn.svm import LinearSVC
 import joblib
 
-from models.src.data.token_data_loader import get_token_dataset
+from models.src.data.token_dataset import get_token_dataset
 from models.src.models.model import classifier
 
 class SVM_Wrapper(classifier):

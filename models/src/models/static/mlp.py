@@ -3,7 +3,7 @@ from torch import nn
 from torch.optim import Adam, SGD
 import torch.utils.data as data_utils
 
-from models.src.data.token_data_loader import get_token_dataset
+from models.src.data.token_dataset import get_token_dataset
 from models.src.utils import plotter
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class model(ABC):
+class classifier(ABC):
     @abstractmethod
     def save_model(self, filename : str):
         pass
@@ -10,9 +10,13 @@ class model(ABC):
         pass
 
     @abstractmethod
-    def predict(self, y_input):
+    def train(self, x_train, y_train):
         pass
 
     @abstractmethod
-    def train(self, x_input, x_labels):
+    def predict(self, x_test):
+        pass
+
+    @abstractmethod
+    def predict_one(self, x_single):
         pass

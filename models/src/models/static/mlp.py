@@ -29,7 +29,6 @@ class One_Net(nn.Module):
         optimizer = Adam(self.parameters(), lr=self.learning_rate)
         return self, criterion, optimizer
 
-
 class Two_Net(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes, learning_rate):
         super(Two_Net, self).__init__()

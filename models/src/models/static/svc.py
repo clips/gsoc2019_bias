@@ -33,7 +33,6 @@ class SVM_Wrapper(classifier):
         else:
             return self.training_time
 
-
 if __name__ == "__main__":
     train_set, test_set = get_token_dataset()
 

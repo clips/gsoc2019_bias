@@ -1,16 +1,19 @@
+import pandas
 import torch
+from sklearn.metrics import f1_score
 from torch import nn
 from torch.optim import Adam, SGD
 import torch.utils.data as data_utils
 
-from models.src.data.idf_dataset import get_token_dataset
+from models.src.data.idf_dataset import IDFDataset
+from models.src.models.model import Classifier
 from models.src.utils import plotter
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-class One_Net(nn.Module):
+class OneNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes, learning_rate):
-        super(One_Net, self).__init__()
+        super(OneNet, self).__init__()
         self.layer_1 = nn.Linear(input_size, hidden_size, bias=True)
         self.relu = nn.modules.activation.LeakyReLU()
         self.output_layer = nn.Linear(hidden_size, num_classes, bias=True)
@@ -29,9 +32,9 @@ class One_Net(nn.Module):
         optimizer = Adam(self.parameters(), lr=self.learning_rate)
         return self, criterion, optimizer
 
-class Two_Net(nn.Module):
+class TwoNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes, learning_rate):
-        super(Two_Net, self).__init__()
+        super(TwoNet, self).__init__()
         self.layer_1 = nn.Linear(input_size, hidden_size, bias=True)
         self.layer_2 = nn.Linear(hidden_size, hidden_size, bias=True)
         self.relu = nn.modules.activation.LeakyReLU()
@@ -53,113 +56,112 @@ class Two_Net(nn.Module):
         optimizer = Adam(self.parameters(), lr=self.learning_rate)
         return self, criterion, optimizer
 
-def train_nn(model, hidden_size = 1000, learning_rate = 0.0001, epochs = 20):
-    BATCH = 200
+class MLPWrapper(Classifier):
+    def __init__(self, model, hidden_size = 1000, learning_rate = 0.0002, epochs = 5, batch_size = 500):
+        self.model = model
+        self.hidden_size = hidden_size
+        self.learning_rate= learning_rate
+        self.epochs = epochs
+        self.batch_size = batch_size
 
-    train, test = get_token_dataset()
-    train.make_tensor_set()
-    test.make_tensor_set()
+    def train(self, idf : IDFDataset):
+        train = idf.get_train_dataset_torch()
 
-    tokenizer = train.tokenizer
+        tokenizer = idf.tokenizer
 
-    train_loader = data_utils.DataLoader(train, batch_size=BATCH)
-    test_loader = data_utils.DataLoader(test, batch_size=BATCH)
+        train_loader = data_utils.DataLoader(train, batch_size=self.batch_size)
 
-    print(train.num_labels)
-    input_size = len(tokenizer.vocabulary_)
-    num_classes = 4
+        input_size = len(tokenizer.vocabulary_)
+        num_classes = idf.num_labels
 
-    network, criterion, optimizer = model(input_size, hidden_size, num_classes, learning_rate).get_net_crit_opt()
+        self.network, self.criterion, optimizer = self.model(input_size, self.hidden_size, num_classes, self.learning_rate).get_net_crit_opt()
 
+        train_loss = []
+        for epoch in range(self.epochs):
+            print(epoch)
+            curr_loss = None
+            for i, data in enumerate(train_loader):
+                inputs, labels = data
 
-    train_loss = []
-    train_accuracy = []
-    test_loss = []
-    test_accuracy = []
+                inputs, labels = inputs.to(device), labels.to(device)
 
+                optimizer.zero_grad()
 
-    accuracy, loss = test_nn_classifier(network, criterion, train_loader, tokenizer, train_data=True)
-    train_accuracy.append(accuracy)
-    train_loss.append(loss)
-    accuracy, loss = test_nn_classifier(network, criterion, test_loader, tokenizer)
-    test_accuracy.append(accuracy)
-    test_loss.append(loss)
+                outputs = self.network(inputs)
+                loss = self.criterion(outputs, labels)
+                loss.backward()
+                optimizer.step()
 
-    best_acc = accuracy
+                if(curr_loss is None):
+                    curr_loss = loss.item()
+                else:
+                    curr_loss = (curr_loss + loss.item())/2
 
-    print()
+            train_loss.append(curr_loss)
 
-    for epoch in range(epochs):
-        for i, data in enumerate(train_loader):
-            inputs, labels = data
+        return train_loss
 
-            inputs, labels = inputs.to(device), labels.to(device)
+    def predict(self, x_test):
+        self.network.eval()
+        outputs = self.network(torch.from_numpy(x_test))
+        self.network.train()
+        return outputs
 
-            optimizer.zero_grad()
+    def predict_one(self, x_single):
+        self.network.eval()
+        output = self.network(x_single)
+        self.network.train()
+        return output
 
-            outputs = network(inputs)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+    def load_model(self, filename: str):
+        pass
 
-        accuracy, loss = test_nn_classifier(network, criterion, train_loader, tokenizer, train_data=True)
-        train_accuracy.append(accuracy)
-        train_loss.append(loss)
-        accuracy, loss = test_nn_classifier(network, criterion, test_loader, tokenizer)
-        test_accuracy.append(accuracy)
-        test_loss.append(loss)
+    def save_model(self, filename: str):
+        pass
 
-        if(accuracy > best_acc):
-            print("New best model found, epoch: " + str(epoch))
-            best_acc = accuracy
+    def score(self, dataset):
+        self.network.eval()
 
-        print()
+        accuracy, loss = None, 0
 
-    print('Training finished')
+        test_loader = data_utils.DataLoader(dataset, batch_size=self.batch_size)
 
-    test_nn_classifier(network, criterion, test_loader, tokenizer, plot = True)
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for data in test_loader:
+                inputs, labels = data
+                inputs, labels = inputs.to(device), labels.to(device)
 
-    return model, test_accuracy, test_loss, train_accuracy, train_loss
+                outputs = self.network(inputs)
+                if(loss == 0):
+                    loss = self.criterion(outputs, labels).item()
+                else:
+                    loss = (loss + self.criterion(outputs, labels).item())/2
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
 
-def test_nn_classifier(network, criterion, loader, vectorizer, train_data = False, plot = False):
-    network.eval()
-
-    accuracy, loss = None, 0
-
-    correct = 0
-    total = 0
-    confusion_matrix = torch.zeros(4, 4)
-    with torch.no_grad():
-        for data in loader:
-            inputs, labels = data
-            inputs, labels = inputs.to(device), labels.to(device)
-
-            outputs = network(inputs)
-            if(loss == 0):
-                loss = criterion(outputs, labels).item()
-            else:
-                loss = (loss + criterion(outputs, labels).item())/2
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-            for t, p in zip(labels.view(-1), predicted.view(-1)):
-               confusion_matrix[t.long(), p.long()] += 1
-
-    network.train()
-
-    plotter.plot_confusion_matrix(confusion_matrix.numpy())
-
-    accuracy = correct / total
-
-    if(train_data):
-        print("Training Accuracy: %.2f, Training Loss: %2f" % (accuracy*100, loss))
-    else:
-        print("Test Accuracy: %.2f, Test Loss: %2f" % (accuracy*100, loss))
-
-    return accuracy, loss
+        self.network.train()
+        accuracy = correct / total
+        return accuracy, loss
 
 if __name__ == "__main__":
-    n = One_Net
-    _, test_accuracy, test_loss, train_accuracy, train_loss = train_nn(One_Net)
-    plotter.plot_loss_graph(train_loss, test_loss)
+    print("Loading file")
+    frame = pandas.read_csv("hatespeech-data.csv", sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
+
+    print("Tokenizing data")
+    dataset = IDFDataset()
+    dataset.load_data(frame, 0.25)
+
+    print("Training classifier")
+    mlp = MLPWrapper(OneNet)
+    mlp.train(dataset)
+    print("Accuracy {}".format(mlp.score(dataset.get_test_dataset_torch())[0]))
+    predicted = mlp.predict(dataset.get_test_dataset()[0])
+    print("F1 Score {}".format(f1_score(dataset.get_test_dataset()[1], predicted, average='weighted')))
+
+    # n = OneNet
+    # _, test_accuracy, test_loss, train_accuracy, train_loss = train_nn(OneNet)
+    # plotter.plot_loss_graph(train_loss, test_loss)
 

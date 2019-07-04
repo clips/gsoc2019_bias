@@ -58,11 +58,23 @@ class IDFDataset(PersistentDataset):
         train_texts, train_labels = train['texts'], train['labels'].astype('category')
         test_texts, test_labels = test['texts'], test['labels'].astype('category')
 
+        self.num_labels = train_labels.nunique()
+
         self.train_labels = train_labels.cat.codes
         self.test_labels = test_labels.cat.codes
 
-        tokenizer = TfidfVectorizer(strip_accents='unicode', stop_words='english', min_df=10)
-        tokenizer.fit(train['texts'])
+        self.tokenizer = TfidfVectorizer(strip_accents='unicode', stop_words='english', min_df=10)
+        self.tokenizer.fit(train['texts'])
 
-        self.train_tokens = tokenizer.transform(train['texts'])
-        self.test_tokens = tokenizer.transform(test['texts'])
+        self.train_tokens = self.tokenizer.transform(train['texts'])
+        self.test_tokens = self.tokenizer.transform(test['texts'])
+
+
+
+if __name__ == '__main__':
+    print("Loading file")
+    frame = pandas.read_csv("hatespeech-data.csv", sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
+
+    print("Tokenizing data")
+    dataset = IDFDataset()
+    dataset.load_data(frame, 0.25)

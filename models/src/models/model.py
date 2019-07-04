@@ -10,7 +10,7 @@ class Classifier(ABC):
         pass
 
     @abstractmethod
-    def train(self, x_train, y_train):
+    def train(self, **kwargs):
         pass
 
     @abstractmethod

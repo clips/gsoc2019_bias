@@ -103,9 +103,12 @@ class MLPWrapper(Classifier):
 
     def predict(self, x_test):
         self.network.eval()
-        outputs = self.network(torch.from_numpy(x_test))
+        with torch.no_grad():
+            input = torch.from_numpy(x_test)
+            outputs = self.network(input.float())
+            _, outputs = torch.max(outputs.data, 1)
         self.network.train()
-        return outputs
+        return outputs.numpy()
 
     def predict_one(self, x_single):
         self.network.eval()
@@ -158,7 +161,9 @@ if __name__ == "__main__":
     mlp = MLPWrapper(OneNet)
     mlp.train(dataset)
     print("Accuracy {}".format(mlp.score(dataset.get_test_dataset_torch())[0]))
-    predicted = mlp.predict(dataset.get_test_dataset()[0])
+    predicted = mlp.predict(dataset.get_test_dataset()[0].todense())
+    print(len(predicted))
+    print(len(dataset.get_test_dataset()[1]))
     print("F1 Score {}".format(f1_score(dataset.get_test_dataset()[1], predicted, average='weighted')))
 
     # n = OneNet

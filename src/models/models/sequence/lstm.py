@@ -1,11 +1,6 @@
-import torch.nn as nn
-import torch
-import torch.nn.functional as F
-
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from torch.nn import functional as F
 
 
 class LSTMClassifier(nn.Module):
@@ -21,7 +16,6 @@ class LSTMClassifier(nn.Module):
         vocab_size : Size of the vocabulary containing unique words
         embedding_length : Embeddding dimension of GloVe word embeddings
         weights : Pre-trained GloVe word_embeddings which we will use to create our word_embedding look-up table 
-
         """
 
         self.batch_size = batch_size

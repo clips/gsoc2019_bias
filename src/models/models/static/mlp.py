@@ -1,13 +1,12 @@
 import pandas
 import torch
+import torch.utils.data as data_utils
+from models.src.models.model import Classifier
 from sklearn.metrics import f1_score
 from torch import nn
-from torch.optim import Adam, SGD
-import torch.utils.data as data_utils
+from torch.optim import Adam
 
-from models.src.data.idf_dataset import IDFDataset
-from models.src.models.model import Classifier
-from models.src.utils import plotter
+from src.models.data import IDFDataset
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

@@ -1,12 +1,13 @@
 import time
 
+import joblib
 import pandas
+from models.src.models.model import Classifier
 from sklearn.metrics import f1_score
 from sklearn.svm import LinearSVC
-import joblib
 
-from models.src.data.idf_dataset import IDFDataset
-from models.src.models.model import Classifier
+from src.models.data import IDFDataset
+
 
 class SVM_Wrapper(Classifier):
     def __init__(self, C=1, loss='hinge', penalty='l2', max_iter=10000):

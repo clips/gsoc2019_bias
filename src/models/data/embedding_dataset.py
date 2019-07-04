@@ -1,13 +1,11 @@
 import pandas
-import torch
-from sklearn.model_selection import train_test_split
-from torch.utils.data import TensorDataset, Dataset
-
-from models.src.data.persistent_dataset import PersistentDataset
-from torchtext import data, datasets
-from torchtext.vocab import Vectors, GloVe
-
 from models.src.utils.torchtext_dataframe_set import DataFrameDataset
+from sklearn.model_selection import train_test_split
+from torchtext import data
+from torchtext.vocab import Vectors
+
+from src.models.data import PersistentDataset
+
 
 class EmbeddingDataset(PersistentDataset):
     def load_data(self, dataframe, test_percentile):

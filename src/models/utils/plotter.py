@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
 from seaborn import heatmap
 import numpy as np
 

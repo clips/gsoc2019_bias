@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-import pandas
 from sklearn.model_selection import train_test_split
+import pandas
 
 #Abstract class for a dataset that supports saving and loading data from files
 class PersistentDataset(ABC):

@@ -1,11 +1,7 @@
-
-import os
 import tensorflow as tf
-import sys
 import numpy as np
 
 from src.adversarials.utils.language_model import language_model_utils, language_model_loader
-
 
 class LM(object):
     def __init__(self):

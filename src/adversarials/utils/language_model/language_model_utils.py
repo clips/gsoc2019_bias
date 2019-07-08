@@ -1,4 +1,3 @@
-
 import sys
 import tensorflow as tf
 from google.protobuf import text_format

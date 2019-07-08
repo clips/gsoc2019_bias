@@ -1,13 +1,8 @@
 
 import numpy as np
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
 import pickle
 
 import os
-#import nltk
-import re
-from collections import Counter
 
 from src.adversarials.utils.data import data_utils
 from src.adversarials.utils.embeddings import glove_utils

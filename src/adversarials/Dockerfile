@@ -1,4 +1,4 @@
-FROM tensorflow:latest-py3
+FROM tensorflow/tensorflow:latest-py3
 
 WORKDIR /app
 

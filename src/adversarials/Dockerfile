@@ -1,4 +1,4 @@
-FROM tensorflow:latest-gpu-py3
+FROM tensorflow:latest-py3
 
 WORKDIR /app
 

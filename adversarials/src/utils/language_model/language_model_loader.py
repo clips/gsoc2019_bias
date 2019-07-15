@@ -14,21 +14,21 @@ class Vocabulary(object):
         self._eos = -1
 
         with tf.gfile.Open(filename) as f:
-          idx = 0
-          for line in f:
-            word_name = line.strip()
-            if word_name == '<S>':
-              self._bos = idx
-            elif word_name == '</S>':
-              self._eos = idx
-            elif word_name == 'UNK':
-              self._unk = idx
-            if word_name == '!!!MAXTERMID':
-              continue
+            idx = 0
+            for line in f:
+                word_name = line.strip()
+                if word_name == '<S>':
+                    self._bos = idx
+                elif word_name == '</S>':
+                    self._eos = idx
+                elif word_name == 'UNK':
+                    self._unk = idx
+                if word_name == '!!!MAXTERMID':
+                    continue
 
-            self._id_to_word.append(word_name)
-            self._word_to_id[word_name] = idx
-            idx += 1
+                self._id_to_word.append(word_name)
+                self._word_to_id[word_name] = idx
+                idx += 1
 
     @property
     def bos(self):
@@ -159,7 +159,7 @@ def get_batch(generator, batch_size, num_steps, max_word_length, pad=False):
                     try:
                         cur_stream[i] = list(generator.next())
                     except StopIteration:
-                    # No more data, exhaust current streams and quit
+                        # No more data, exhaust current streams and quit
                         no_more_data = True
                         break
 
@@ -187,31 +187,18 @@ def get_batch(generator, batch_size, num_steps, max_word_length, pad=False):
 
 
 class LM1BDataset(object):
-    """Utility class for 1B word benchmark dataset.
-    The current implementation reads the data from the tokenized text files.
-    """
+    # Utility class for 1B word benchmark dataset.
+    # The current implementation reads the data from the tokenized text files.
 
     def __init__(self, filepattern, vocab):
-        """Initialize LM1BDataset reader.
-        Args:
-        filepattern: Dataset file pattern.
-        vocab: Vocabulary.
-        """
         self._vocab = vocab
         self._all_shards = tf.gfile.Glob(filepattern)
         tf.logging.info('Found %d shards at %s', len(self._all_shards), filepattern)
 
     def _load_random_shard(self):
-        """Randomly select a file and read it."""
         return self._load_shard(random.choice(self._all_shards))
 
     def _load_shard(self, shard_name):
-        """Read one file and convert to ids.
-        Args:
-        shard_name: file path.
-        Returns:
-        list of (id, char_id, global_word_id) tuples.
-        """
         tf.logging.info('Loading data from: %s', shard_name)
         with tf.gfile.Open(shard_name) as f:
             sentences = f.readlines()

@@ -3,6 +3,7 @@ import numpy as np
 
 from adversarials.src.utils.language_model import language_model_utils, language_model_loader
 
+
 class LM(object):
     def __init__(self):
         self.PBTXT_PATH = 'goog_lm/graph-2016-09-10.pbtxt'
@@ -21,8 +22,6 @@ class LM(object):
         with self.graph.as_default():
             self.t = language_model_utils.LoadModel(self.sess, self.graph, self.PBTXT_PATH, self.CKPT_PATH)
 
-
-
     def get_words_probs(self, prefix_words, list_words, suffix=None):
         targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
         weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
@@ -37,21 +36,21 @@ class LM(object):
 
         samples = prefix[:]
         char_ids_samples = prefix_char_ids[:]
-        inputs = [ [samples[-1]]]
+        inputs = [[samples[-1]]]
         char_ids_inputs[0, 0, :] = char_ids_samples[-1]
         softmax = self.sess.run(self.t['softmax_out'],
-        feed_dict={
-            self.t['char_inputs_in']: char_ids_inputs,
-            self.t['inputs_in']: inputs,
-            self.t['targets_in']: targets,
-            self.t['target_weights_in']: weights
-        })
+                                feed_dict={
+                                    self.t['char_inputs_in']: char_ids_inputs,
+                                    self.t['inputs_in']: inputs,
+                                    self.t['targets_in']: targets,
+                                    self.t['target_weights_in']: weights
+                                })
         # print(list_words)
         words_ids = [self.vocab.word_to_id(w) for w in list_words]
-        word_probs =[softmax[0][w_id] for w_id in words_ids]
+        word_probs = [softmax[0][w_id] for w_id in words_ids]
         word_probs = np.array(word_probs)
 
-        if suffix == None:
+        if suffix is None:
             suffix_probs = np.ones(word_probs.shape)
         else:
             suffix_id = self.vocab.word_to_id(suffix)
@@ -62,12 +61,12 @@ class LM(object):
                 w_char_ids = self.vocab.word_to_char_ids(list_words[idx])
                 char_ids_inputs[0, 0, :] = w_char_ids
                 softmax = self.sess.run(self.t['softmax_out'],
-                                         feed_dict={
-                                             self.t['char_inputs_in']: char_ids_inputs,
-                                             self.t['inputs_in']: inputs,
-                                             self.t['targets_in']: targets,
-                                             self.t['target_weights_in']: weights
-                                         })
+                                        feed_dict={
+                                            self.t['char_inputs_in']: char_ids_inputs,
+                                            self.t['inputs_in']: inputs,
+                                            self.t['targets_in']: targets,
+                                            self.t['target_weights_in']: weights
+                                        })
                 suffix_probs.append(softmax[0][suffix_id])
             suffix_probs = np.array(suffix_probs)
         # print(word_probs, suffix_probs)

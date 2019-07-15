@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from torchtext import data
 from torchtext.vocab import Vectors
 
-from src.models.data import PersistentDataset
+from models.src.data import PersistentDataset
 
 
 class EmbeddingDataset(PersistentDataset):

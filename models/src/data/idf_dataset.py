@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, TensorDataset
 
-from src.models.data import PersistentDataset
+from models.src.data import PersistentDataset
 
 
 class IDFDataset(PersistentDataset):

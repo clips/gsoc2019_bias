@@ -2,9 +2,9 @@ import numpy as np
 import pickle
 
 
-def loadGloveModel(gloveFile):
+def load_glove_model(filename):
     print("Loading Glove Model")
-    f = open(gloveFile, 'r')
+    f = open(filename, 'r')
     model = {}
     for line in f:
         row = line.strip().split(' ')
@@ -15,18 +15,20 @@ def loadGloveModel(gloveFile):
     print("Done.", len(model), " words loaded!")
     return model
 
+
 def save_glove_to_pickle(glove_model, file_name):
     with open(file_name, 'wb') as f:
         pickle.dump(glove_model, f)
+
 
 def load_glove_from_pickle(file_name):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
 
-def create_embeddings_matrix(glove_model, dictionary, full_dictionary, d=300):
+
+def create_embeddings_matrix(glove_model, dictionary, d=300):
     MAX_VOCAB_SIZE = len(dictionary)
-    # Matrix size is 300
-    embedding_matrix = np.zeros(shape=((d, MAX_VOCAB_SIZE + 1)))
+    embedding_matrix = np.zeros(shape=(d, MAX_VOCAB_SIZE + 1))
     cnt = 0
     unfound = []
 
@@ -43,9 +45,6 @@ def create_embeddings_matrix(glove_model, dictionary, full_dictionary, d=300):
 
 
 def pick_most_similar_words(src_word, dist_mat, ret_count=10, threshold=None):
-    """
-    embeddings is a matrix with (d, vocab_size)
-    """
     dist_order = np.argsort(dist_mat[src_word, :])[1:1 + ret_count]
     dist_list = dist_mat[src_word][dist_order]
     if dist_list[-1] == 0:

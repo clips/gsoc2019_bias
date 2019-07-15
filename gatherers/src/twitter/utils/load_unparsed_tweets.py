@@ -1,6 +1,6 @@
 import pandas as pd
 
-from gatherers.twitter.data.database_api import Mongo_API
+from gatherers.src.twitter import Mongo_API
 
 # Load a csv from a comma delimited file
 def load_from_file(file_name):

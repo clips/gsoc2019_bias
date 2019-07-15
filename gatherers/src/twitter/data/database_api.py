@@ -2,8 +2,8 @@ from datetime import datetime
 
 from mongoengine import connect
 
-from gatherers.twitter.data.database_odm import Tweets
-from gatherers.twitter.utils.singleton import Singleton
+from gatherers.src.twitter import Tweets
+from gatherers.src.twitter import Singleton
 
 # Singleton class for accessing the tweets database, connects to localhost MongoDB instance without any authentication
 class Mongo_API(metaclass=Singleton):

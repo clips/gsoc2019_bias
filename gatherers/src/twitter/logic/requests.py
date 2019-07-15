@@ -3,11 +3,10 @@ from datetime import datetime
 from queue import Queue
 import aiohttp
 import asyncio
-import time
 
-from gatherers.twitter.data.database_api import Mongo_API
-from gatherers.twitter.logic.parsing import parse_tweet
-from gatherers.twitter.utils.async_runner import Async_Runner
+from gatherers.src.twitter import Mongo_API
+from gatherers.src.twitter.logic import parse_tweet
+from gatherers.src.twitter import Async_Runner
 
 # Configure log format and log level
 LOG_FORMAT = ('%(levelname) -5s %(asctime) -10s %(name) -5s %(funcName) -5s %(lineno) -10d: %(message)s')

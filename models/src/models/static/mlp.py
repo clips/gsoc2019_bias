@@ -6,7 +6,7 @@ from sklearn.metrics import f1_score
 from torch import nn
 from torch.optim import Adam
 
-from src.models.data import IDFDataset
+from models.src.data import IDFDataset
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

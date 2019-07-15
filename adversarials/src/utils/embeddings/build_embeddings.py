@@ -4,8 +4,8 @@ import pickle
 
 import os
 
-from src.adversarials.utils.data import data_utils
-from src.adversarials.utils.embeddings import glove_utils
+from adversarials.src.utils.data import data_utils
+from adversarials.src.utils.embeddings import glove_utils
 
 IMDB_PATH = 'aclImdb'
 MAX_VOCAB_SIZE = 50000
@@ -20,13 +20,13 @@ with open(('aux_files/dataset_%d.pkl' %(MAX_VOCAB_SIZE)), 'wb') as f:
     pickle.dump(imdb_dataset, f)
 
 # create the glove embeddings matrix (used by the classification model)
-glove_model = glove_utils.loadGloveModel(GLOVE_PATH)
+glove_model = glove_utils.load_glove_model(GLOVE_PATH)
 glove_embeddings, _ = glove_utils.create_embeddings_matrix(glove_model, imdb_dataset.dict, imdb_dataset.full_dict)
 # save the glove_embeddings matrix
 np.save('aux_files/embeddings_glove_%d.npy' %(MAX_VOCAB_SIZE), glove_embeddings)
 
 # Load the counterfitted-vectors (used by our attack)
-glove2 = glove_utils.loadGloveModel('counter-fitted-vectors.txt')
+glove2 = glove_utils.load_glove_model('counter-fitted-vectors.txt')
 # create embeddings matrix for our vocabulary
 counter_embeddings, missed = glove_utils.create_embeddings_matrix(glove2, imdb_dataset.dict, imdb_dataset.full_dict)
 

@@ -1,15 +1,19 @@
 import numpy as np
 import pickle
 
+UNK_TOKEN = 'UNK'
 
 def load_glove_model(filename):
-    f = open(filename, 'r')
+    f = open(filename, 'r', encoding='utf-8')
     model = {}
     for line in f:
         row = line.strip().split(' ')
         word = row[0]
         embedding = np.array([float(val) for val in row[1:]])
         model[word] = embedding
+
+    if UNK_TOKEN not in model.keys():
+        model[UNK_TOKEN] = np.zeros(100)
     return model
 
 
@@ -30,12 +34,11 @@ def create_embeddings_matrix(glove_model, dictionary, d=300):
 
     for w, i in dictionary.items():
         if w not in glove_model:
-            embedding_matrix[:, i] = glove_model['UNK']
+            embedding_matrix[:, i] = glove_model[UNK_TOKEN]
             not_found.append(i)
         else:
             embedding_matrix[:, i] = glove_model[w]
 
-    print('Number of not found words = ', len(not_found))
     return embedding_matrix, not_found
 
 

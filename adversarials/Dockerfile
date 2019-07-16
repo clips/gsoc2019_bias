@@ -11,4 +11,4 @@ ENV WORDS_PATH = "gender-switched-words.txt"
 
 RUN cd /app
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
-RUN chmod +x download_counterfitted.sh, chmod +x download_glove.sh, chmod +x download_glove_twitter.sh, ./download_counterfitted.sh, ./download_glove.sh, ./download_glove_twitter.sh
+# RUN chmod +x download_counterfitted.sh, chmod +x download_glove.sh, chmod +x download_glove_twitter.sh, ./download_counterfitted.sh, ./download_glove.sh, ./download_glove_twitter.sh

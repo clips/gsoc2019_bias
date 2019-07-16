@@ -61,6 +61,6 @@ if __name__ == "__main__":
                 if(row[0] in [i[1] for i in closest_f2m[:3]]):
                     top3 += 1
 
-                print("\tMale to female, Similarity: {} \n\t Words: ".format(similarity_m2f) + get_closest_words(matrix, dict, [row[0], 'woman'], ['man'], 10).__str__())
-                print("\tFemale to male, Similarity: {} \n\t Words: ".format(similarity_f2m) + get_closest_words(matrix, dict, [row[1], 'man'], ['woman'], 10).__str__())
+                print("\tMale to female, Similarity: {} \n\tWords: ".format(similarity_m2f) + get_closest_words(matrix, dict, [row[0], 'woman'], ['man'], 10).__str__())
+                print("\tFemale to male, Similarity: {} \n\tWords: ".format(similarity_f2m) + get_closest_words(matrix, dict, [row[1], 'man'], ['woman'], 10).__str__())
         print("Top3 results: {}".format(top3))

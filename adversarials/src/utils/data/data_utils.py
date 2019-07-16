@@ -113,6 +113,9 @@ class TwitterDataset(object):
         self.dict['UNK'] = vocab_size
         self.inv_dict[max_vocab_size] = 'UNK'
 
+    def get_dict(self):
+        return self.dict, self.inv_dict
+
     def save(self):
         with open(self.path + '_dictionary.pickle', 'wb') as f:
             pickle.dump((self.dict, self.inv_dict), f)

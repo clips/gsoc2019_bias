@@ -7,8 +7,7 @@ class DistanceMatrix:
     def compute_distance_matrix(self, embedding_matrix):
         c_ = -2 * np.dot(embedding_matrix.T, embedding_matrix)
         a = np.sum(np.square(embedding_matrix), axis=0).reshape((1, -1))
-        b = a.T
-        self.dist = a + b + c_
+        self.dist = a + a.T + c_
 
     def test_distance_matrix(self, word, dict, inv_dict):
         src_word = dict[word]

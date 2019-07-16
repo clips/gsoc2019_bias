@@ -15,7 +15,7 @@ def load_glove_model(filename):
     embedding_dim = len(next(iter(model.values())))
 
     if UNK_TOKEN not in model.keys():
-        model[UNK_TOKEN] = np.zeros(embedding_dim)
+        model[UNK_TOKEN] = np.random.rand(embedding_dim)
 
     return model, embedding_dim
 
@@ -45,12 +45,11 @@ def create_embeddings_matrix(glove_model, dictionary, d=300):
     return embedding_matrix, not_found
 
 
-def pick_most_similar_words(src_word, dist_mat, ret_count=10, threshold=None):
+def pick_most_similar_words(src_word, dist_mat, ret_count=10, threshold=None, vector = None):
     dist_order = np.argsort(dist_mat[src_word, :])[1:1 + ret_count]
     dist_list = dist_mat[src_word][dist_order]
     if dist_list[-1] == 0:
         return [], []
-    mask = np.ones_like(dist_list)
     if threshold is not None:
         mask = np.where(dist_list < threshold)
         return dist_order[mask], dist_list[mask]

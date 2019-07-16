@@ -12,9 +12,12 @@ def load_glove_model(filename):
         embedding = np.array([float(val) for val in row[1:]])
         model[word] = embedding
 
+    embedding_dim = len(next(iter(model.values())))
+
     if UNK_TOKEN not in model.keys():
-        model[UNK_TOKEN] = np.zeros(100)
-    return model
+        model[UNK_TOKEN] = np.zeros(embedding_dim)
+
+    return model, embedding_dim
 
 
 def save_glove_to_pickle(glove_model, file_name):

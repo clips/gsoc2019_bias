@@ -1,10 +1,10 @@
 import pandas
-from models.src.utils.torchtext_dataframe_set import DataFrameDataset
+from src.utils.torchtext_dataframe_set import DataFrameDataset
 from sklearn.model_selection import train_test_split
 from torchtext import data
 from torchtext.vocab import Vectors
 
-from models.src.data import PersistentDataset
+from src.data.persistent_dataset import PersistentDataset
 
 
 class EmbeddingDataset(PersistentDataset):

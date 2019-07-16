@@ -1,11 +1,12 @@
 import pandas
 import torch
-from models.src.utils.sparse_utils import save_sparse_csr, load_sparse_csr, convert_sparse_matrix_to_tensor
+
+from src.utils.sparse_utils import save_sparse_csr, load_sparse_csr, convert_sparse_matrix_to_tensor
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, TensorDataset
 
-from models.src.data import PersistentDataset
+from src.data.persistent_dataset import PersistentDataset
 
 
 class IDFDataset(PersistentDataset):

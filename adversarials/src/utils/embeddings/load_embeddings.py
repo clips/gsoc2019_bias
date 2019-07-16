@@ -3,8 +3,8 @@ import pickle
 
 import os
 
-from adversarials.src.utils.data import data_utils
-from adversarials.src.utils.embeddings import glove_utils
+from src.utils.data import data_utils
+from src.utils.embeddings import glove_utils
 
 IMDB_PATH = 'aclImdb'
 MAX_VOCAB_SIZE = 50000

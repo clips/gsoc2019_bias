@@ -2,11 +2,11 @@ import time
 
 import joblib
 import pandas
-from models.src.models.model import Classifier
+
+from src.data.idf_dataset import IDFDataset
+from src.models.model import Classifier
 from sklearn.metrics import f1_score
 from sklearn.svm import LinearSVC
-
-from models.src.data import IDFDataset
 
 
 class SVM_Wrapper(Classifier):

@@ -1,9 +1,7 @@
-
 import random
 
 import numpy as np
 import tensorflow as tf
-
 
 class Vocabulary(object):
     def __init__(self, filename):

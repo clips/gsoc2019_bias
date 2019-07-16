@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-from adversarials.src.utils.language_model import language_model_utils, language_model_loader
+from src.utils.language_model import language_model_utils, language_model_loader
 
 
 class LM(object):

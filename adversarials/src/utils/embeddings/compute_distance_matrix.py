@@ -1,7 +1,7 @@
 import numpy as np
 import pickle
 
-from adversarials.src.utils.embeddings import glove_utils
+from src.utils.embeddings import glove_utils
 
 MAX_VOCAB_SIZE = 50000
 embedding_matrix = np.load(('aux_files/embeddings_counter_%d.npy' % MAX_VOCAB_SIZE))

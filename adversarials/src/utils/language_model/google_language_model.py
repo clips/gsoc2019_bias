@@ -31,7 +31,6 @@ class LM(object):
         prefix = [self.vocab.word_to_id(w) for w in prefix_words.split()]
         prefix_char_ids = [self.vocab.word_to_char_ids(w) for w in prefix_words.split()]
 
-        inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
         char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
 
         samples = prefix[:]

@@ -10,5 +10,3 @@ ENV WORDS_PATH "gender-switched-words.txt"
 
 RUN cd /app
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-CMD python3 -m src.utils.language_model.google_language_model

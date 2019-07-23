@@ -3,13 +3,6 @@ import tensorflow as tf
 from google.protobuf import text_format
 
 def LoadModel(sess, graph, gd_file, ckpt_file):
-    """Load the model from GraphDef and Checkpoint.
-    Args:
-    gd_file: GraphDef proto text file.
-    ckpt_file: TensorFlow Checkpoint file.
-    Returns:
-    TensorFlow session and tensors dict.
-    """
     with graph.as_default():
         sys.stderr.write('Recovering graph.\n')
         with tf.gfile.FastGFile(gd_file, 'r') as f:

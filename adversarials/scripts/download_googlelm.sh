@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+test -d resources || mkdir resources
+cd resources
 test -d goog_lm || mkdir goog_lm
 cd goog_lm
 # Actually download the model files.
@@ -17,4 +19,3 @@ wget http://download.tensorflow.org/models/LM_LSTM_CNN/all_shards-2016-09-10/ckp
 wget http://download.tensorflow.org/models/LM_LSTM_CNN/all_shards-2016-09-10/ckpt-softmax7
 wget http://download.tensorflow.org/models/LM_LSTM_CNN/all_shards-2016-09-10/ckpt-softmax8
 wget http://download.tensorflow.org/models/LM_LSTM_CNN/vocab-2016-09-10.txt
-cd ..

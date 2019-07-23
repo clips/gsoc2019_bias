@@ -244,7 +244,7 @@ class GreedyAttack(object):
         num_updates = 0
         while ((num_updates / doc_len) < max_change):
             # pick some word
-            W = []  # Set of candiaate updates
+            W = []  # Set of candidate updates
             list_x_new = []
             for i, x in enumerate(x_adv):
                 # for each word in x_adv
@@ -260,6 +260,7 @@ class GreedyAttack(object):
                             x_new[i] = x_list[j]
                             list_x_new.append(x_new)
                             break
+
             x_new_pred_probs = np.array([self.model.predict(self.sess, x[np.newaxis, :])[0] for x in list_x_new])
             x_new_preds = np.argmax(x_new_pred_probs, axis=1)
             x_new_scores = x_new_pred_probs[:, target]

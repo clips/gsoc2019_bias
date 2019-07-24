@@ -10,9 +10,9 @@ from src.utils.data.data_utils import TwitterDataset
 from src.utils.embeddings.compute_distance_matrix import DistanceMatrix
 from src.utils.embeddings.glove_utils import *
 
-TWITTER_PATH = "hatespeech-data.csv"
+TWITTER_PATH = os.getenv('DATA_PATH')
 GLOVE_PATH = os.getenv('GLOVE_PATH').replace("\"", "").split(sep=',')
-GENDER_PATH = "gendered-word-pairs.csv"
+GENDER_PATH = os.getenv('WORDS_PATH')
 
 def get_closest_words(matrix, dict, add, minus, limit, threshold = None):
     vector = numpy.zeros(matrix.shape[0])

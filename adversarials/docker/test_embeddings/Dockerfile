@@ -6,7 +6,7 @@ COPY . /app
 
 ENV MAT_DTYPE "float16"
 ENV GLOVE_PATH "resources/embed/counter-fitted-vectors.txt,embed/glove.twitter.27B.25d.txt,embed/glove.twitter.27B.50d.txt,embed/glove.twitter.27B.100d.txt,embed/glove.twitter.27B.200d.txt,embed/glove.840B.300d.txt"
-ENV WORDS_PATH "resources/gender-switched-words.txt"
+ENV WORDS_PATH "resources/gendered-word-pairs.csv"
 ENV DATA_PATH "resources/hatespeech-data.csv"
 
 RUN cd /app

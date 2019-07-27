@@ -4,7 +4,7 @@ import scipy.sparse as scisparse
 from src.utils.embeddings.glove_utils import get_closest_words
 
 class ReplacementDictionary:
-    def __init__(self, matrix, dict, add = None, minus = None, vocabulary = None, limit = 3, threshold = None, dynamic = True):
+    def __init__(self, matrix, word_idx, add = None, minus = None, vocabulary = None, limit = 3, threshold = None, dynamic = True):
         if minus is None:
             minus = []
         self.minus = minus
@@ -17,7 +17,7 @@ class ReplacementDictionary:
 
         self.replacements = dict()
         self.matrix = matrix
-        self.word_idx = dict
+        self.word_idx = word_idx
 
         if not dynamic:
             if vocabulary is None:

@@ -29,4 +29,4 @@ if __name__ == "__main__":
     replacements = ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, dynamic = True)
     for word in dict.keys():
         print(word)
-        replacements.get_replacements(word)
+        print(replacements.get_replacements(word))

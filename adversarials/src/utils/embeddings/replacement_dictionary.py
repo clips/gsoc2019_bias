@@ -34,5 +34,5 @@ class ReplacementDictionary:
             print([w[1] for w in swap_replacements ])
 
 
-            self.replacements[word] = standard_replacements - swap_replacements
+            self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
         return self.replacements[word]

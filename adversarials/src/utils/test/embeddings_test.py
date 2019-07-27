@@ -1,36 +1,13 @@
-import logging
 import os
-
-import numpy
-import pandas
-import scipy.spatial.distance as dist
 import csv
 
 from src.utils.data.data_utils import TwitterDataset
-from src.utils.embeddings.compute_distance_matrix import DistanceMatrix
 from src.utils.embeddings.glove_utils import *
 
 TWITTER_PATH = os.getenv('DATA_PATH')
 GLOVE_PATH = os.getenv('GLOVE_PATH').replace("\"", "").split(sep=',')
 GENDER_PATH = os.getenv('WORDS_PATH')
 
-def get_closest_words(matrix, dict, add, minus, limit, threshold = None):
-    vector = numpy.zeros(matrix.shape[0])
-    for word in add:
-        vector += matrix[:,dict[word]]
-    for word in minus:
-        vector -= matrix[:,dict[word]]
-
-    words_with_distance = [(1 - dist.cosine(vector, matrix[:,dict[w]]), w) for w in dict.keys()]
-    return sorted(words_with_distance, key=lambda t: t[0], reverse=True)[:10]
-
-def get_similarity(matrix, dict, add, minus, target):
-    vector = numpy.zeros(matrix.shape[0])
-    for word in add:
-        vector += matrix[:,dict[word]]
-    for word in minus:
-        vector -= matrix[:,dict[word]]
-    return 1 - dist.cosine(vector, matrix[:,dict[target]])
 
 if __name__ == "__main__":
     print("Loading dataset dictionary")

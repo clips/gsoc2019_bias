@@ -16,16 +16,17 @@ if __name__ == "__main__":
     dict, inv_dict = TwitterDataset(path=TWITTER_PATH, min_instances=5).get_dict()
     print(GLOVE_PATH)
     print(GLOVE_PATH[-1])
-    with GLOVE_PATH[-1] as glove_name:
-        print("Loading glove model, name = {}".format(glove_name))
-        glove_model, embedding_dim = load_glove_model(glove_name)
 
-        print("Creating embedding matrix, dim = {}".format(embedding_dim))
-        matrix, not_found = create_embeddings_matrix(glove_model, dict, d=embedding_dim)
-        print("Words not found in embedding file: {}".format(len(not_found)))
+    glove_name = GLOVE_PATH[-1]
+    print("Loading glove model, name = {}".format(glove_name))
+    glove_model, embedding_dim = load_glove_model(glove_name)
+
+    print("Creating embedding matrix, dim = {}".format(embedding_dim))
+    matrix, not_found = create_embeddings_matrix(glove_model, dict, d=embedding_dim)
+    print("Words not found in embedding file: {}".format(len(not_found)))
 
 
-        replacements = ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, threshold = None, dynamic = True)
-        for word in dict.keys():
-            print(word)
-            print(replacements.get_replacements(word))
+    replacements = ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, threshold = None, dynamic = True)
+    for word in dict.keys():
+        print(word)
+        print(replacements.get_replacements(word))

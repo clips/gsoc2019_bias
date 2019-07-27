@@ -5,9 +5,10 @@ from src.utils.data.data_utils import TwitterDataset
 from src.utils.embeddings.glove_utils import *
 from src.utils.embeddings.replacement_dictionary import ReplacementDictionary
 
-TWITTER_PATH = os.getenv('DATA_PATH')
-GLOVE_PATH = os.getenv('GLOVE_PATH').replace("\"", "").split(sep=',')
-GENDER_PATH = os.getenv('WORDS_PATH')
+RESOURCES_PATH = os.getenv('RESOURCE_PATH')
+TWITTER_PATH = RESOURCES_PATH + os.getenv('DATA_PATH')
+GLOVE_PATH = map(lambda path : RESOURCES_PATH + path, os.getenv('GLOVE_PATH').replace("\"", "").split(sep=','))
+GENDER_PATH = RESOURCES_PATH + os.getenv('WORDS_PATH')
 
 
 if __name__ == "__main__":

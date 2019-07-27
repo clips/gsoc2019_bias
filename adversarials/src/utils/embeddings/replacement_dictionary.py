@@ -29,5 +29,5 @@ class ReplacementDictionary:
     def get_replacements(self, word):
         if word not in self.replacements.keys():
             word : str
-            self.replacements[word] = get_closest_words(self.matrix, self.word_idx, self.add + word, self.minus, self.limit, self.threshold)
+            self.replacements[word] = get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit, self.threshold)
         return self.replacements[word]

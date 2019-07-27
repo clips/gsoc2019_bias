@@ -7,13 +7,15 @@ from src.utils.embeddings.replacement_dictionary import ReplacementDictionary
 
 RESOURCES_PATH = os.getenv('RESOURCE_PATH')
 TWITTER_PATH = RESOURCES_PATH + os.getenv('DATA_PATH')
-GLOVE_PATH = map(lambda path : RESOURCES_PATH + path, os.getenv('GLOVE_PATH').replace("\"", "").split(sep=','))
+GLOVE_PATH = [RESOURCES_PATH + path for path in os.getenv('GLOVE_PATH').replace("\"", "").split(sep=',')]
 GENDER_PATH = RESOURCES_PATH + os.getenv('WORDS_PATH')
 
 
 if __name__ == "__main__":
     print("Loading dataset dictionary")
     dict, inv_dict = TwitterDataset(path=TWITTER_PATH, min_instances=5).get_dict()
+    print(GLOVE_PATH)
+    print(GLOVE_PATH[-1])
     with GLOVE_PATH[-1] as glove_name:
         print("Loading glove model, name = {}".format(glove_name))
         glove_model, embedding_dim = load_glove_model(glove_name)

@@ -4,15 +4,13 @@ import scipy.sparse as scisparse
 from src.utils.embeddings.glove_utils import get_closest_words
 
 class ReplacementDictionary:
-    def __init__(self, matrix, word_idx, add = None, minus = None, vocabulary = None, limit = 3, threshold = None, dynamic = True):
+    def __init__(self, matrix, word_idx, add = None, minus = None, vocabulary = None, limit = 3, dynamic = True):
         if minus is None:
             minus = []
         self.minus = minus
         if add is None:
             add = []
         self.add = add
-
-        self.threshold = threshold
         self.limit = limit
 
         self.replacements = dict()
@@ -29,5 +27,12 @@ class ReplacementDictionary:
     def get_replacements(self, word):
         if word not in self.replacements.keys():
             word : str
-            self.replacements[word] = get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit, self.threshold)
+            standard_replacements = get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)
+            swap_replacements = get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)
+
+            print([w[1] for w in standard_replacements ])
+            print([w[1] for w in swap_replacements ])
+
+
+            self.replacements[word] = standard_replacements - swap_replacements
         return self.replacements[word]

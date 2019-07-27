@@ -26,7 +26,7 @@ if __name__ == "__main__":
     print("Words not found in embedding file: {}".format(len(not_found)))
 
 
-    replacements = ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, threshold = None, dynamic = True)
+    replacements = ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, dynamic = True)
     for word in dict.keys():
         print(word)
-        print(replacements.get_replacements(word))
+        replacements.get_replacements(word)

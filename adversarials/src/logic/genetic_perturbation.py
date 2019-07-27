@@ -7,7 +7,8 @@ from src.utils.embeddings import glove_utils
 class GeneticAtack(object):
     def __init__(self, sess, model, batch_model,
                  neighbour_model,
-                 dataset, dist_mat,
+                 dataset,
+                 dist_mat,
                  skip_list,
                  lm,
                  pop_size=20, max_iters=100,

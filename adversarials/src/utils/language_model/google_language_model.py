@@ -3,12 +3,11 @@ import numpy as np
 
 from src.utils.language_model import language_model_utils, language_model_loader
 
-
 class LM(object):
     def __init__(self):
-        self.PBTXT_PATH = 'goog_lm/graph-2016-09-10.pbtxt'
-        self.CKPT_PATH = 'goog_lm/ckpt-*'
-        self.VOCAB_PATH = 'goog_lm/vocab-2016-09-10.txt'
+        self.PBTXT_PATH = 'resources/goog_lm/graph-2016-09-10.pbtxt'
+        self.CKPT_PATH = 'resources/goog_lm/ckpt-*'
+        self.VOCAB_PATH = 'resources/goog_lm/vocab-2016-09-10.txt'
 
         self.BATCH_SIZE = 1
         self.NUM_TIMESTEPS = 1

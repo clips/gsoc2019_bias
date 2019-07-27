@@ -74,13 +74,13 @@ if __name__ == '__main__':
     prefix = 'i'
     suffix = 'yesterday'
     probs = (my_lm.get_words_probs(prefix, list_words, suffix))
-    for i, w in enumerate(list_words):
+    for i, w in enumerate(sorted(list_words)):
         print(w, ' - ', probs[i])
 
     list_words = 'nice great game weather motorcycle'.split()
     prefix = 'this morning is'
     probs = (my_lm.get_words_probs(prefix, list_words))
-    for i, w in enumerate(list_words):
+    for i, w in enumerate(sorted(list_words)):
         print(w, ' - ', probs[i])
 
 
@@ -88,5 +88,5 @@ if __name__ == '__main__':
     prefix = 'their'
     suffix = 'is going to go to college'
     probs = (my_lm.get_words_probs(prefix, list_words))
-    for i, w in enumerate(list_words):
+    for i, w in enumerate(sorted(list_words)):
         print(w, ' - ', probs[i])

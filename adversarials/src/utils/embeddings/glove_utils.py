@@ -1,5 +1,7 @@
+import numpy
 import numpy as np
 import pickle
+import scipy.spatial.distance as dist
 
 UNK_TOKEN = 'UNK'
 
@@ -19,17 +21,6 @@ def load_glove_model(filename):
 
     return model, embedding_dim
 
-
-def save_glove_to_pickle(glove_model, file_name):
-    with open(file_name, 'wb') as f:
-        pickle.dump(glove_model, f)
-
-
-def load_glove_from_pickle(file_name):
-    with open(file_name, 'rb') as f:
-        return pickle.load(f)
-
-
 def create_embeddings_matrix(glove_model, dictionary, d=300):
     vocab_size = len(dictionary)
     embedding_matrix = np.zeros(shape=(d, vocab_size + 1))
@@ -41,17 +32,22 @@ def create_embeddings_matrix(glove_model, dictionary, d=300):
             not_found.append(i)
         else:
             embedding_matrix[:, i] = glove_model[w]
-
     return embedding_matrix, not_found
 
+def get_closest_words(matrix, dict, add, minus, limit, threshold = None):
+    vector = numpy.zeros(matrix.shape[0])
+    for word in add:
+        vector += matrix[:,dict[word]]
+    for word in minus:
+        vector -= matrix[:,dict[word]]
 
-def pick_most_similar_words(src_word, dist_mat, ret_count=10, threshold=None, vector = None):
-    dist_order = np.argsort(dist_mat[src_word, :])[1:1 + ret_count]
-    dist_list = dist_mat[src_word][dist_order]
-    if dist_list[-1] == 0:
-        return [], []
-    if threshold is not None:
-        mask = np.where(dist_list < threshold)
-        return dist_order[mask], dist_list[mask]
-    else:
-        return dist_order, dist_list
+    words_with_distance = [(1 - dist.cosine(vector, matrix[:,dict[w]]), w) for w in dict.keys()]
+    return sorted(words_with_distance, key=lambda t: t[0], reverse=True)[:limit]
+
+def get_similarity(matrix, dict, add, minus, target):
+    vector = numpy.zeros(matrix.shape[0])
+    for word in add:
+        vector += matrix[:,dict[word]]
+    for word in minus:
+        vector -= matrix[:,dict[word]]
+    return 1 - dist.cosine(vector, matrix[:,dict[target]])

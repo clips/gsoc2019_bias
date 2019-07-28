@@ -27,6 +27,7 @@ class ReplacementDictionary:
 
     def get_replacements(self, word):
         if word not in self.replacements.keys():
+            print(word)
             if word in stop_words.ENGLISH_STOP_WORDS:
                 self.replacements[word] = []
             else:

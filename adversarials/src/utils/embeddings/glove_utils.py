@@ -51,3 +51,11 @@ def get_similarity(matrix, dict, add, minus, target):
     for word in minus:
         vector -= matrix[:,dict[word]]
     return 1 - dist.cosine(vector, matrix[:,dict[target]])
+
+def get_distance(matrix, dict, add, minus, target):
+    vector = numpy.zeros(matrix.shape[0])
+    for word in add:
+        vector += matrix[:,dict[word]]
+    for word in minus:
+        vector -= matrix[:,dict[word]]
+    return dist.cosine(vector, matrix[:,dict[target]])

@@ -1,10 +1,11 @@
 import pandas
 import torch
-
-from src.model_temp.persistent_dataset import PersistentDataset
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, TensorDataset
+
+from src.utils.model_temp.persistent_dataset import PersistentDataset
+
 
 class IDFDataset(PersistentDataset):
     def __init__(self):

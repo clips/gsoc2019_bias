@@ -65,7 +65,7 @@ class IDFDataset(PersistentDataset):
         self.train_labels = train_labels.cat.codes
         self.test_labels = test_labels.cat.codes
 
-        self.tokenizer = TfidfVectorizer(strip_accents='unicode', stop_words='english', min_df=10)
+        self.tokenizer = TfidfVectorizer(strip_accents='unicode', min_df=10)
         self.tokenizer.fit(train['texts'])
 
         self.train_tokens = self.tokenizer.transform(train['texts'])

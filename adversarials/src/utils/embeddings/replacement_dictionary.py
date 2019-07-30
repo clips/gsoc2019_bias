@@ -25,6 +25,8 @@ class ReplacementDictionary:
                 for word in vocabulary:
                     self.get_replacements(word)
 
+
+    #TODO: Filter out replacements that are closer to the original word than the target vector
     def get_replacements(self, word):
         if word not in self.replacements.keys():
             print(word)
@@ -35,7 +37,6 @@ class ReplacementDictionary:
                                          get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)]
                 swap_replacements = [item[1] for item in
                                      get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)]
-                print(standard_replacements)
-                print(swap_replacements)
+
                 self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
         return self.replacements[word]

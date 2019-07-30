@@ -85,9 +85,12 @@ class GenderSwitchAttackBaseline():
                 if(predictions[index][self.target] > self.current_prediction[self.target]):
                     best = index
 
+        return words[best], predictions[best]
+
     #With an input sentence and position, generate replacements and return the best new word and the new prediction
     def _perturb(self, sent_current, position):
-        pass
+        replacements = self.replacement_matrix.get_replacements(word=sent_current[position])
+        return self._select_best(sent_current, position, replacements)
 
     #Returns an altered sentence with the word at the $pos index changed with $word
     def _replace_at_pos(self, sentence, pos, word):

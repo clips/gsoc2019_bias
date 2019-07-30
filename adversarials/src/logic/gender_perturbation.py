@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 
 class GenderSwitchAttackGenetic():
@@ -31,33 +33,73 @@ class GenderSwitchAttackBaseline():
         self.language_model_threshold = 0.1
         self.language_model_context = 1
 
+        self.target = None
+        self.original_prediction = None
+        self.current_prediction = None
+
+    def attack_all(self):
+        for sample in self.samples:
+            self.attack(sample)
+
+    #Routine that executes a baselike perturbation on the $sentence.
+    #If a target label is provided then the goal is to maximize that label's probability prediction,
+    #otherwise, the algorithm attempts to minimize the probability prediction of the original label
+    def attack(self, sentence : str, target_label : int = None):
+        #Save the original and current prediction probability arrays
+        self._set_orig_prediction(self.model.predict(sentence))
+        self._set_curr_prediction(self.original_prediction)
+
+        #If target is provided, use it.
+        if target_label is not None:
+            self._set_target(target_label)
+        #Otherwise minimize original label.
+        else:
+            self._set_target(-(np.argmax(self.original_prediction) + 1))
+
+        #Split the input to individual words
+        current_sentence : List(str) = sentence.split(' ')
+
+        #Save the modifications to a list
+        modifications = list()
+        for index in range(len(current_sentence)):
+            orig_word = current_sentence[index]
+            new_word, new_prediction = self._perturb(current_sentence, index)
+
+            #Replace the word with the new word
+            current_sentence = self._replace_at_pos(current_sentence, index, new_word)
+
+            self._set_curr_prediction(new_prediction)
+            modifications.append((orig_word, new_word))
+
+    #With an input list of sentences, determine the one that best approaches the currently stored target
+    def _select_best(self, sentence : List(str), position : int, words : List(str)):
+        best = -1
+        testers = [self._replace_at_pos(sentence, position, word) for word in words]
+        predictions = [self.model.predict([' '.join(tester) for tester in testers])]
+
+        for index in range(len(words)):
+            if self.target < 0:
+                if(predictions[index][self.target + 1] < self.current_prediction[self.target + 1]):
+                    best = index
+            else:
+                if(predictions[index][self.target] > self.current_prediction[self.target]):
+                    best = index
+
+    #With an input sentence and position, generate replacements and return the best new word and the new prediction
+    def _perturb(self, sent_current, position):
+        pass
+
+    #Returns an altered sentence with the word at the $pos index changed with $word
     def _replace_at_pos(self, sentence, pos, word):
         new_sentence = sentence.copy()
         new_sentence[pos] = word
         return new_sentence
 
-    def _select_replacement(self, sent_current, sent_original, position, replacements):
-        if len(replacements) == 0:
-            return sent_current
+    def _set_target(self, target):
+        self.target = target
 
-        new_sentences = [self._replace_at_pos(sent_current, position, word) for word in replacements]
-        new_predictions = [self.model.predict(sentence) for sentence in new_sentences]
+    def _set_orig_prediction(self, prediction):
+        self.original_prediction = prediction
 
-    def _perturb(self, sent_current, sent_original, position, target=None):
-        sent_len = np.sum(np.sign(sent_current))
-        assert position < sent_len
-
-        word_original = sent_current[position]
-        replacements = self.replacement_matrix.get_replacements(word_original)
-        return self._select_replacement(sent_current, sent_original, position, replacements)
-
-    def attack(self, sentence, target_label=None):
-        self.target = None
-        self.original_prediction = np.argmax(self.model.predict(sentence))
-
-        sent_len = np.sum(np.sign(sentence.copy()))
-
-        mod_sentence = sentence.copy()
-        for i in range(sent_len):
-            word = mod_sentence[i]
-            word_new = self.perturb(mod_sentence, i, sentence, target_label)
+    def _set_curr_prediction(self, prediction):
+        self.current_prediction = prediction

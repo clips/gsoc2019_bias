@@ -11,7 +11,7 @@ from src.model_temp.model import Classifier
 from src.utils.model_temp.idf_dataset import IDFDataset
 
 
-class SVM_Wrapper(Classifier):
+class SVMWrapper(Classifier):
     def __init__(self, vectorizer, C=1, loss='hinge', penalty='l2', max_iter=10000):
         svc = LinearSVC(C=C, loss=loss, penalty=penalty, max_iter=max_iter)
         self.vectorizer = vectorizer
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     test_tokens, test_labels = dataset.get_test_dataset()
 
     print("Training classifier")
-    svm = SVM_Wrapper(dataset.tokenizer)
+    svm = SVMWrapper(dataset.tokenizer)
     svm.train(tokens, labels)
     predicted = [numpy.argmax(prob) for prob in svm.predict(test_tokens)]
     print("Accuracy {}".format(svm.classifier.score(test_tokens, test_labels)))

@@ -6,7 +6,7 @@ import pandas
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import f1_score
 from sklearn.svm import LinearSVC
-from src.model_temp.model import Classifier
+from src.utils.model_temp.model import Classifier
 
 from src.utils.model_temp.idf_dataset import IDFDataset
 

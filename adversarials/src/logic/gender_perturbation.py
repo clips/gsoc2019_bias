@@ -47,7 +47,7 @@ class GenderSwitchAttackBaseline():
     def attack(self, sentence : str, target_label : int = None):
         #Save the original and current prediction probability arrays
         print("Attacking sentence " + sentence)
-        self._set_orig_prediction(self.model.predict(sentence))
+        self._set_orig_prediction(self.model.predict_one(sentence, plain = True))
         print("Original prediction: " + self.original_prediction)
         self._set_curr_prediction(self.original_prediction)
 
@@ -81,7 +81,7 @@ class GenderSwitchAttackBaseline():
     def _select_best(self, sentence, position, words):
         best = -1
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
-        predictions = [self.model.predict([' '.join(tester) for tester in testers])]
+        predictions = [self.model.predict_one([' '.join(tester)], plain = True) for tester in testers]
 
         for index in range(len(words)):
             if self.target < 0:

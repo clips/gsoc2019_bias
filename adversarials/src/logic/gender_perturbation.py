@@ -87,7 +87,6 @@ class GenderSwitchAttackBaseline():
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
         for index in range(len(words)):
-            print(index)
             if self.target < 0:
                 if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]):
                     best = index

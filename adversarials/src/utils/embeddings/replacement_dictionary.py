@@ -1,4 +1,6 @@
 import os
+import string
+
 import scipy.sparse as scisparse
 
 from src.utils.embeddings.glove_utils import get_closest_words
@@ -28,6 +30,7 @@ class ReplacementDictionary:
 
     #TODO: Filter out replacements that are closer to the original word than the target vector
     def get_replacements(self, word):
+        word = word.translate(str.maketrans('','', string.punctuation))
         if word not in self.replacements.keys():
             if word in stop_words.ENGLISH_STOP_WORDS:
                 self.replacements[word] = []
@@ -40,6 +43,5 @@ class ReplacementDictionary:
 
                     self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
                 except Exception as e:
-                    print(e)
                     self.replacements[word] = []
         return self.replacements[word]

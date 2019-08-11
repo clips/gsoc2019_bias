@@ -54,12 +54,15 @@ def load_replacements(inverse = False):
 def load_samples():
     print("Loading samples")
     frame = pandas.read_csv(SAMPLES_PATH, sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
-    return frame
+    print(frame)
+    return frame["texts"].values.tolist()
 
 if __name__ == "__main__":
     svm = load_dataset()
     matrix = load_replacements()
     samples = load_samples()
+
+    print(samples)
 
     print("Generating attack")
     attack = GenderSwitchAttackBaseline(svm, samples, matrix)

@@ -48,7 +48,7 @@ class GenderSwitchAttackBaseline():
         #Save the original and current prediction probability arrays
         print("Attacking sentence " + sentence)
         self._set_orig_prediction(self.model.predict_one(sentence, plain = True))
-        print("Original prediction: " + self.original_prediction)
+        print("Original prediction: {}".format(self.original_prediction))
         self._set_curr_prediction(self.original_prediction)
 
         #If target is provided, use it.

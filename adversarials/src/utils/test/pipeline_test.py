@@ -63,3 +63,4 @@ if __name__ == "__main__":
 
     print("Generating attack")
     attack = GenderSwitchAttackBaseline(svm, samples, matrix)
+    attack.attack_all()

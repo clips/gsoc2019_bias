@@ -16,7 +16,7 @@ SAMPLES_PATH = RESOURCES_PATH + os.getenv('SAMPLES_PATH')
 
 def load_dataset():
     print("Loading dataset")
-    frame = pandas.read_csv("hatespeech-data.csv", sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
+    frame = pandas.read_csv(TWITTER_PATH, sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
 
     print("Tokenizing data")
     dataset = IDFDataset()

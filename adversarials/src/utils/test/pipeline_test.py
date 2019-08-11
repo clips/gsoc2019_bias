@@ -53,7 +53,7 @@ def load_replacements(inverse = False):
 
 def load_samples():
     print("Loading samples")
-    frame = pandas.read_csv("hatespeech-data.csv", sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
+    frame = pandas.read_csv(SAMPLES_PATH, sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
     return frame
 
 if __name__ == "__main__":

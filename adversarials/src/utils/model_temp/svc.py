@@ -31,9 +31,9 @@ class SVMWrapper(Classifier):
 
     def predict_one(self, x_single, plain=False):
         if plain:
-            return self.classifier.predict_proba(self.vectorizer.transform([x_single]))
+            return self.classifier.predict_proba(self.vectorizer.transform([x_single]))[0]
         else:
-            return self.classifier.predict_proba(x_single)
+            return self.classifier.predict_proba(x_single)[0]
 
     def save_model(self, filename: str):
         joblib.dump(self.classifier, filename)

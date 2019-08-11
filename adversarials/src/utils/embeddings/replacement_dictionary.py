@@ -33,10 +33,14 @@ class ReplacementDictionary:
             if word in stop_words.ENGLISH_STOP_WORDS:
                 self.replacements[word] = []
             else:
-                standard_replacements = [item[1] for item in
-                                         get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)]
-                swap_replacements = [item[1] for item in
-                                     get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)]
+                try:
+                    standard_replacements = [item[1] for item in
+                                             get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)]
+                    swap_replacements = [item[1] for item in
+                                         get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)]
 
-                self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
+                    self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
+                except Exception as e:
+                    print(e)
+                    self.replacements[word] = []
         return self.replacements[word]

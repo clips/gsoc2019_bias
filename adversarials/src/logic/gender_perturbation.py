@@ -74,7 +74,7 @@ class GenderSwitchAttackBaseline():
                 print("New word: " + new_word)
                 #Replace the word with the new word
                 current_sentence = self._replace_at_pos(current_sentence, index, new_word)
-                print("Current sentence: {}".format(current_sentence))
+                print("Current sentence: {}".format(' '.join(current_sentence)))
                 print("Current prediction: {}".format(new_prediction))
 
                 self._set_curr_prediction(new_prediction)

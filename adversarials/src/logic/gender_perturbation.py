@@ -91,6 +91,7 @@ class GenderSwitchAttackBaseline():
         print(predictions)
 
         for index in range(len(words)):
+            print(index)
             if self.target < 0:
                 if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]):
                     best = index

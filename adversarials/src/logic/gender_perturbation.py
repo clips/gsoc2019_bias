@@ -92,7 +92,7 @@ class GenderSwitchAttackBaseline():
 
         for index in range(len(words)):
             if self.target < 0:
-                if(predictions[index][self.target + 1] < self.current_prediction[self.target + 1]):
+                if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]):
                     best = index
             else:
                 if(predictions[index][self.target] > self.current_prediction[self.target]):

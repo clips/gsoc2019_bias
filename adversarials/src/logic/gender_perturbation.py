@@ -46,14 +46,18 @@ class GenderSwitchAttackBaseline():
     #otherwise, the algorithm attempts to minimize the probability prediction of the original label
     def attack(self, sentence : str, target_label : int = None):
         #Save the original and current prediction probability arrays
+        print("Attacking sentence " + sentence)
         self._set_orig_prediction(self.model.predict(sentence))
+        print("Original prediction: " + self.original_prediction)
         self._set_curr_prediction(self.original_prediction)
 
         #If target is provided, use it.
         if target_label is not None:
+            print("Maximize label: {}".format(target_label))
             self._set_target(target_label)
         #Otherwise minimize original label.
         else:
+            print("Minimize label: {}".format(np.argmax(self.original_prediction)))
             self._set_target(-(np.argmax(self.original_prediction) + 1))
 
         #Split the input to individual words
@@ -63,8 +67,10 @@ class GenderSwitchAttackBaseline():
         modifications = list()
         for index in range(len(current_sentence)):
             orig_word = current_sentence[index]
+            print("Modifying word: " + orig_word)
             new_word, new_prediction = self._perturb(current_sentence, index)
-
+            print("New word: " + new_word)
+            print(new_prediction)
             #Replace the word with the new word
             current_sentence = self._replace_at_pos(current_sentence, index, new_word)
 

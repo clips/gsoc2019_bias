@@ -83,7 +83,9 @@ class GenderSwitchAttackBaseline():
     def _select_best(self, sentence, position, words):
         best = -1
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
-        predictions = [self.model.predict_one([' '.join(tester)], plain = True) for tester in testers]
+        print(testers)
+        predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
+        print(predictions)
 
         for index in range(len(words)):
             if self.target < 0:

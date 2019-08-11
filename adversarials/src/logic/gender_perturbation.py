@@ -82,6 +82,9 @@ class GenderSwitchAttackBaseline():
     #With an input list of sentences, determine the one that best approaches the currently stored target
     def _select_best(self, sentence, position, words):
         best = -1
+        print(sentence)
+        print(position)
+        print(words)
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
         print(testers)
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]

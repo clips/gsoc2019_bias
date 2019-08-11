@@ -72,9 +72,10 @@ class GenderSwitchAttackBaseline():
             new_word, new_prediction = self._perturb(current_sentence, index)
             if new_word is not None:
                 print("New word: " + new_word)
-                print(new_prediction)
                 #Replace the word with the new word
                 current_sentence = self._replace_at_pos(current_sentence, index, new_word)
+                print("Current sentence: {}".format(current_sentence))
+                print("Current prediction: {}".format(new_prediction))
 
                 self._set_curr_prediction(new_prediction)
                 modifications.append((orig_word, new_word))
@@ -82,13 +83,8 @@ class GenderSwitchAttackBaseline():
     #With an input list of sentences, determine the one that best approaches the currently stored target
     def _select_best(self, sentence, position, words):
         best = -1
-        print(sentence)
-        print(position)
-        print(words)
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
-        print(testers)
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
-        print(predictions)
 
         for index in range(len(words)):
             print(index)

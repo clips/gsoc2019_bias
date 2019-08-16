@@ -41,6 +41,8 @@ class GenderSwitchAttackBaseline():
         results = []
         for sample in self.samples:
             results.append(self.attack(sample))
+            if np.argmax(self.original_prediction) != np.argmax(self.current_prediction):
+                print("Successful perturbation")
         print(results)
 
     #Routine that executes a baselike perturbation on the $sentence.

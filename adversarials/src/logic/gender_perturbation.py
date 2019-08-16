@@ -90,12 +90,13 @@ class GenderSwitchAttackBaseline():
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
+        #The difference must be at least 5% for a change to be made
         for index in range(len(words)):
             if self.target < 0:
-                if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]):
+                if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]*0.95):
                     best = index
             else:
-                if(predictions[index][self.target] > self.current_prediction[self.target]):
+                if(predictions[index][self.target] > self.current_prediction[self.target]*1.05):
                     best = index
 
         if best != -1:

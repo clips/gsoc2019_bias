@@ -37,9 +37,11 @@ class GenderSwitchAttackBaseline():
         self.original_prediction = None
         self.current_prediction = None
 
-    def attack_all(self):
+    def attack_all(self, metric = True):
+        results = []
         for sample in self.samples:
-            self.attack(sample)
+            results.append(self.attack(sample))
+        print(results)
 
     #Routine that executes a baselike perturbation on the $sentence.
     #If a target label is provided then the goal is to maximize that label's probability prediction,
@@ -79,6 +81,8 @@ class GenderSwitchAttackBaseline():
 
                 self._set_curr_prediction(new_prediction)
                 modifications.append((orig_word, new_word))
+
+        return self.original_prediction, self.current_prediction
 
     #With an input list of sentences, determine the one that best approaches the currently stored target
     def _select_best(self, sentence, position, words):

@@ -51,14 +51,17 @@ class GenderSwitchAttackBaseline():
             if np.argmax(self.original_prediction) != np.argmax(self.current_prediction):
                 print("Successful perturbation")
             orig_labels.append(np.argmax(self.original_prediction))
+            print(orig_labels[-1])
             pert_labels.append(np.argmax(self.original_prediction))
+            print(pert_labels[-1])
             label_changed.append(1 if orig_labels[-1] != pert_labels[-1] else 0)
+            print(label_changed[-1])
 
             num_changes.append(len(modifications))
 
         if metric:
             percent = sum(label_changed)/len(self.samples)
-            print("Successful modification percentage = {}".format(percent))
+            print("Successful modifications = {}, {}".format(sum(label_changed), percent))
 
             avg_modifications = sum(num_changes)/len(self.samples)
             mod_weight = 0

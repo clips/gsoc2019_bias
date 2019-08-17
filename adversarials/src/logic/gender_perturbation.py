@@ -96,10 +96,10 @@ class GenderSwitchAttackBaseline():
         modifications = list()
         for index in range(len(current_sentence)):
             orig_word = current_sentence[index]
-            print("Modifying word: " + orig_word)
 
             new_word, new_prediction = self._perturb(current_sentence, index)
             if new_word is not None:
+                print("Orig word: " + orig_word)
                 print("New word: " + new_word)
                 #Replace the word with the new word
                 current_sentence = self._replace_at_pos(current_sentence, index, new_word)

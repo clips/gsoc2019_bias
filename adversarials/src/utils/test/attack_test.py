@@ -54,7 +54,7 @@ def load_replacements(inverse = False):
 if __name__ == "__main__":
     svm, frame = load_dataset()
     matrix = load_replacements()
-    samples = frame["texts"].values.tolist()[100:110]
+    samples = frame["texts"].values.tolist()[110:160]
 
     print("Generating attack")
     attack = GenderSwitchAttackBaseline(svm, samples, matrix)

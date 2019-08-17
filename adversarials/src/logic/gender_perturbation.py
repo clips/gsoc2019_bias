@@ -66,9 +66,9 @@ class GenderSwitchAttackBaseline():
                 print("Modifications {}/{}={}, success = {}".format(avg_modifications, num_changes[i], avg_modifications/num_changes[i], label_changed[i]))
 
                 if(label_changed[i] == 1):
-                    mod_weight += avg_modifications/num_changes[i]
+                    mod_weight += avg_modifications/num_changes[i] if num_changes[i] != 0 else 0
                 else:
-                    mod_weight -= avg_modifications/num_changes[i]
+                    mod_weight -= avg_modifications/num_changes[i] if num_changes[i] != 0 else 0
             print(mod_weight)
 
     #Routine that executes a baselike perturbation on the $sentence.

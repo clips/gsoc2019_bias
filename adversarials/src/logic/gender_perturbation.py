@@ -51,11 +51,8 @@ class GenderSwitchAttackBaseline():
             if np.argmax(self.original_prediction) != np.argmax(self.current_prediction):
                 print("Successful perturbation")
             orig_labels.append(np.argmax(self.original_prediction))
-            print(orig_labels[-1])
-            pert_labels.append(np.argmax(self.original_prediction))
-            print(pert_labels[-1])
+            pert_labels.append(np.argmax(self.current_prediction))
             label_changed.append(1 if orig_labels[-1] != pert_labels[-1] else 0)
-            print(label_changed[-1])
 
             num_changes.append(len(modifications))
 
@@ -69,9 +66,9 @@ class GenderSwitchAttackBaseline():
                 print("Modifications {}/{}={}, success = {}".format(avg_modifications, num_changes[i], avg_modifications/num_changes[i], label_changed[i]))
 
                 if(label_changed[i] == 1):
-                    mod_weight += avg_modifications[i]/num_changes[i]
+                    mod_weight += avg_modifications/num_changes[i]
                 else:
-                    mod_weight -= avg_modifications[i]/num_changes[i]
+                    mod_weight -= avg_modifications/num_changes[i]
             print(mod_weight)
 
     #Routine that executes a baselike perturbation on the $sentence.

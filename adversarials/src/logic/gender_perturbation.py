@@ -60,8 +60,16 @@ class GenderSwitchAttackBaseline():
             print("Successful modification percentage = {}".format(percent))
 
             avg_modifications = sum(num_changes)/len(self.samples)
+            mod_weight = 0
             for i in range(len(self.samples)):
                 print("Modifications {}/{}={}, success = {}".format(avg_modifications[i], num_changes[i], avg_modifications[i]/num_changes[i], label_changed[i]))
+
+                if(label_changed[i] == 1):
+                    mod_weight += avg_modifications[i]/num_changes[i]
+                else:
+                    mod_weight -= avg_modifications[i]/num_changes[i]
+            print(mod_weight)
+
 
 
     #Routine that executes a baselike perturbation on the $sentence.

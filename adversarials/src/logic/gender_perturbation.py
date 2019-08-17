@@ -59,6 +59,11 @@ class GenderSwitchAttackBaseline():
             percent = sum(label_changed)/len(orig_labels)
             print("Successful modification percentage = {}".format(percent))
 
+            avg_modifications = sum(num_changes)/len(self.samples)
+            for i in range(len(self.samples)):
+                print("Modifications {}/{}={}, success = {}".format(avg_modifications[i], num_changes[i], avg_modifications[i]/num_changes[i], label_changed[i]))
+
+
     #Routine that executes a baselike perturbation on the $sentence.
     #If a target label is provided then the goal is to maximize that label's probability prediction,
     #otherwise, the algorithm attempts to minimize the probability prediction of the original label

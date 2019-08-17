@@ -43,7 +43,7 @@ class GenderSwitchAttackBaseline():
         orig_labels = []
         pert_labels = []
         num_changes = []
-
+        label_changed = []
         for sample in self.samples:
             sentences.append(sample)
             sent, modifications = self.attack(sample)
@@ -52,17 +52,18 @@ class GenderSwitchAttackBaseline():
                 print("Successful perturbation")
             orig_labels.append(np.argmax(self.original_prediction))
             pert_labels.append(np.argmax(self.original_prediction))
+            label_changed.append(1 if orig_labels[-1] != pert_labels[-1] else 0)
+
             num_changes.append(len(modifications))
 
         if metric:
-            label_changed = [1 if orig_labels[i] != pert_labels[i] else 0 for i in range(len(self.samples))]
-            percent = sum(label_changed)/len(orig_labels)
+            percent = sum(label_changed)/len(self.samples)
             print("Successful modification percentage = {}".format(percent))
 
             avg_modifications = sum(num_changes)/len(self.samples)
             mod_weight = 0
             for i in range(len(self.samples)):
-                print("Modifications {}/{}={}, success = {}".format(avg_modifications[i], num_changes[i], avg_modifications[i]/num_changes[i], label_changed[i]))
+                print("Modifications {}/{}={}, success = {}".format(avg_modifications, num_changes[i], avg_modifications/num_changes[i], label_changed[i]))
 
                 if(label_changed[i] == 1):
                     mod_weight += avg_modifications[i]/num_changes[i]

@@ -43,6 +43,7 @@ class LM(object):
                                     self.t['targets_in']: targets,
                                     self.t['target_weights_in']: weights
                                 })
+
         words_ids = [self.vocab.word_to_id(w) for w in list_words]
         word_probs = [softmax[0][w_id] for w_id in words_ids]
         word_probs = np.array(word_probs)

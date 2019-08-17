@@ -70,8 +70,6 @@ class GenderSwitchAttackBaseline():
                     mod_weight -= avg_modifications[i]/num_changes[i]
             print(mod_weight)
 
-
-
     #Routine that executes a baselike perturbation on the $sentence.
     #If a target label is provided then the goal is to maximize that label's probability prediction,
     #otherwise, the algorithm attempts to minimize the probability prediction of the original label

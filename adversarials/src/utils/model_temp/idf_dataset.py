@@ -58,7 +58,7 @@ class IDFDataset(PersistentDataset):
         train_texts, train_labels = train['texts'], train['labels'].astype('category')
         test_texts, test_labels = test['texts'], test['labels'].astype('category')
 
-        print(dict(enumerate(train['labels'].cat.categories)))
+        print(dict(enumerate(train['labels'].astype('category').cat.categories)))
 
         self.num_labels = train_labels.nunique()
 

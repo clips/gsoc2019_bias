@@ -30,7 +30,7 @@ class ReplacementDictionary:
 
     #TODO: Filter out replacements that are closer to the original word than the target vector
     def get_replacements(self, word):
-        word = word.translate(str.maketrans('','', string.punctuation))
+        word = word.translate(word.maketrans('','', string.punctuation))
         if word not in self.replacements.keys():
             if word in stop_words.ENGLISH_STOP_WORDS:
                 self.replacements[word] = []

@@ -30,14 +30,12 @@ class LM(object):
         prefix = [self.vocab.word_to_id(w) for w in prefix_words.split()]
         prefix_char_ids = [self.vocab.word_to_char_ids(w) for w in prefix_words.split()]
 
-        char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
+        char_ids_inputs = np.zeros([self.BATCH_SIZE, len(prefix_char_ids), self.vocab.max_word_length], np.int32)
 
-        samples = prefix[:]
-        char_ids_samples = prefix_char_ids[:]
         # inputs = [[samples[-1]]]
         # char_ids_inputs[0, 0, :] = char_ids_samples[-1]
-        inputs = [[samples]]
-        char_ids_inputs[0, :, :] = char_ids_samples
+        inputs = [[prefix]]
+        char_ids_inputs[0, :, :] = prefix_char_ids
         softmax = self.sess.run(self.t['softmax_out'],
                                 feed_dict={
                                     self.t['char_inputs_in']: char_ids_inputs,

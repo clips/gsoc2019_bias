@@ -22,15 +22,18 @@ class LM(object):
             self.t = language_model_utils.LoadModel(self.sess, self.graph, self.PBTXT_PATH, self.CKPT_PATH)
 
     def get_words_probs(self, prefix_words, list_words, suffix=None):
-        targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
-        weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
-
         if prefix_words.find('<S>') != 0:
             prefix_words = '<S> ' + prefix_words
         prefix = [self.vocab.word_to_id(w) for w in prefix_words.split()]
         prefix_char_ids = [self.vocab.word_to_char_ids(w) for w in prefix_words.split()]
 
-        char_ids_inputs = np.zeros([self.BATCH_SIZE, len(prefix_char_ids), self.vocab.max_word_length], np.int32)
+        self.NUM_TIMESTEPS = len(prefix_char_ids)
+
+        targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
+        weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
+
+
+        char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
 
         # inputs = [[samples[-1]]]
         # char_ids_inputs[0, 0, :] = char_ids_samples[-1]

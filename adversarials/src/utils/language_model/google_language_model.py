@@ -34,8 +34,10 @@ class LM(object):
 
         samples = prefix[:]
         char_ids_samples = prefix_char_ids[:]
-        inputs = [[samples[-1]]]
-        char_ids_inputs[0, 0, :] = char_ids_samples[-1]
+        # inputs = [[samples[-1]]]
+        # char_ids_inputs[0, 0, :] = char_ids_samples[-1]
+        inputs = [[samples]]
+        char_ids_inputs[0, 0, :] = char_ids_samples
         softmax = self.sess.run(self.t['softmax_out'],
                                 feed_dict={
                                     self.t['char_inputs_in']: char_ids_inputs,

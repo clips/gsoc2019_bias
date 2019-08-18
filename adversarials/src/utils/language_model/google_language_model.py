@@ -21,62 +21,92 @@ class LM(object):
         with self.graph.as_default():
             self.t = language_model_utils.LoadModel(self.sess, self.graph, self.PBTXT_PATH, self.CKPT_PATH)
 
-    def get_words_probs(self, prefix_words, list_words, suffix=None):
+    def get_words_probs_default(self, prefix_words, list_words, suffix=None):
+        targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
+        weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
+
         if prefix_words.find('<S>') != 0:
             prefix_words = '<S> ' + prefix_words
         prefix = [self.vocab.word_to_id(w) for w in prefix_words.split()]
         prefix_char_ids = [self.vocab.word_to_char_ids(w) for w in prefix_words.split()]
 
-        self.NUM_TIMESTEPS = len(prefix_char_ids)
-
-        targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
-        weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
-
+        inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
         char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
 
-        # inputs = [[samples[-1]]]
-        # char_ids_inputs[0, 0, :] = char_ids_samples[-1]
-        inputs = [[prefix]]
-        char_ids_inputs[0, :, :] = prefix_char_ids
-
-        print(self.BATCH_SIZE)
-        print(self.NUM_TIMESTEPS)
-        print(targets.shape)
-        print(weights.shape)
-        print(np.array(inputs).shape)
-        print(char_ids_inputs.shape)
-
+        samples = prefix[:]
+        char_ids_samples = prefix_char_ids[:]
+        inputs = [[samples[-1]]]
+        char_ids_inputs[0, 0, :] = char_ids_samples[-1]
         softmax = self.sess.run(self.t['softmax_out'],
-                                feed_dict={
-                                    self.t['char_inputs_in']: char_ids_inputs,
-                                    self.t['inputs_in']: inputs,
-                                    self.t['targets_in']: targets,
-                                    self.t['target_weights_in']: weights
-                                })
-
+        feed_dict={
+            self.t['char_inputs_in']: char_ids_inputs,
+            self.t['inputs_in']: inputs,
+            self.t['targets_in']: targets,
+            self.t['target_weights_in']: weights
+        })
+        # print(list_words)
         words_ids = [self.vocab.word_to_id(w) for w in list_words]
-        word_probs = [softmax[0][w_id] for w_id in words_ids]
+        word_probs =[softmax[0][w_id] for w_id in words_ids]
         word_probs = np.array(word_probs)
 
-        if suffix is None:
+        if suffix == None:
             suffix_probs = np.ones(word_probs.shape)
         else:
             suffix_id = self.vocab.word_to_id(suffix)
             suffix_probs = []
             for idx, w_id in enumerate(words_ids):
+                # print('..', list_words[idx])
                 inputs = [[w_id]]
                 w_char_ids = self.vocab.word_to_char_ids(list_words[idx])
                 char_ids_inputs[0, 0, :] = w_char_ids
                 softmax = self.sess.run(self.t['softmax_out'],
-                                        feed_dict={
-                                            self.t['char_inputs_in']: char_ids_inputs,
-                                            self.t['inputs_in']: inputs,
-                                            self.t['targets_in']: targets,
-                                            self.t['target_weights_in']: weights
-                                        })
+                                         feed_dict={
+                                             self.t['char_inputs_in']: char_ids_inputs,
+                                             self.t['inputs_in']: inputs,
+                                             self.t['targets_in']: targets,
+                                             self.t['target_weights_in']: weights
+                                         })
                 suffix_probs.append(softmax[0][suffix_id])
             suffix_probs = np.array(suffix_probs)
+        # print(word_probs, suffix_probs)
         return suffix_probs * word_probs
+
+    def get_words_probs(self, prefix_words, list_words, suffix=None):
+        targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
+        weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
+
+        if prefix_words.find('<S>') != 0:
+            prefix_words = '<S> ' + prefix_words
+
+        prefix = [self.vocab.word_to_id(w) for w in prefix_words.split()]
+        prefix_char_ids = [self.vocab.word_to_char_ids(w) for w in prefix_words.split()]
+
+        inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
+        char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
+
+        samples = prefix[:]
+        char_ids_samples = prefix_char_ids[:]
+        while True:
+            inputs[0,0] = samples[0]
+            char_ids_inputs[0, 0, :] = char_ids_samples[0]
+            samples = samples[1:]
+            char_ids_samples = char_ids_samples[1:]
+
+            softmax = self.sess.run(self.t['softmax_out'],
+                            feed_dict={
+                                self.t['char_inputs_in']: char_ids_inputs,
+                                self.t['inputs_in']: inputs,
+                                self.t['targets_in']: targets,
+                                self.t['target_weights_in']: weights
+                            })
+
+
+            if len(samples) == 0:
+                words_ids = [self.vocab.word_to_id(w) for w in list_words]
+                word_probs = np.array([softmax[0][w_id] for w_id in words_ids])
+                break
+
+        return word_probs
 
 
 if __name__ == '__main__':

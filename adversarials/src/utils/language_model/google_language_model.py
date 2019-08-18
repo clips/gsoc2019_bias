@@ -32,13 +32,20 @@ class LM(object):
         targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
         weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
 
-
         char_ids_inputs = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS, self.vocab.max_word_length], np.int32)
 
         # inputs = [[samples[-1]]]
         # char_ids_inputs[0, 0, :] = char_ids_samples[-1]
         inputs = [[prefix]]
         char_ids_inputs[0, :, :] = prefix_char_ids
+
+        print(self.BATCH_SIZE)
+        print(self.NUM_TIMESTEPS)
+        print(targets.shape)
+        print(weights.shape)
+        print(np.array(inputs).shape)
+        print(char_ids_inputs.shape)
+
         softmax = self.sess.run(self.t['softmax_out'],
                                 feed_dict={
                                     self.t['char_inputs_in']: char_ids_inputs,

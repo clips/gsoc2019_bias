@@ -37,7 +37,7 @@ class LM(object):
         # inputs = [[samples[-1]]]
         # char_ids_inputs[0, 0, :] = char_ids_samples[-1]
         inputs = [[samples]]
-        char_ids_inputs[0, 0, :] = char_ids_samples
+        char_ids_inputs[0, :, :] = char_ids_samples
         softmax = self.sess.run(self.t['softmax_out'],
                                 feed_dict={
                                     self.t['char_inputs_in']: char_ids_inputs,
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     list_words = 'play will playing played afternoon'.split()
     prefix = 'i'
     suffix = 'yesterday'
-    probs = (my_lm.get_words_probs(prefix, list_words, suffix))
+    probs = (my_lm.get_words_probs(prefix, list_words, None))
     for i in range(len(list_words)):
         print(list_words[i], ' - ', probs[i])
 
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     list_words = 'son daughter car weather him afternoon'.split()
     prefix = 'their'
     suffix = 'is going to go to college'
-    probs = (my_lm.get_words_probs(prefix, list_words, suffix))
+    probs = (my_lm.get_words_probs(prefix, list_words, None))
     for i in range(len(list_words)):
         print(list_words[i], ' - ', probs[i])

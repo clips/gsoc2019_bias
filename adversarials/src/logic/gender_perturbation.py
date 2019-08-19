@@ -123,9 +123,9 @@ class GenderSwitchAttackBaseline():
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
         if self.use_language_model:
-            orig_word_prob = self.language_model.get_words_probs(sentence[:position-1], sentence[position])[0]
+            orig_word_prob = self.language_model.get_words_probs(' '.join(sentence[:position-1]), sentence[position])[0]
             print(orig_word_prob)
-            word_probs = self.language_model.get_words_probs(sentence[:position-1], words)
+            word_probs = self.language_model.get_words_probs(' '.join(sentence[:position-1]), words)
             print(word_probs)
 
         best = -1

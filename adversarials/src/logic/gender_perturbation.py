@@ -122,11 +122,14 @@ class GenderSwitchAttackBaseline():
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
+        #If there are no possible alternatives return
+        if len(words == 0):
+            return None, None
+
         if self.use_language_model:
-            orig_word_prob = self.language_model.get_words_probs(' '.join(sentence[:position-1]), [sentence[position]])[0]
-            print(orig_word_prob)
-            word_probs = self.language_model.get_words_probs(' '.join(sentence[:position-1]), words)
-            print(word_probs)
+            word_probs = self.language_model.get_words_probs(' '.join(sentence[:position-1]), [sentence[position]] + words)
+            orig_word_prob = word_probs[0]
+            word_probs = word_probs[1:]
 
         best = -1
         curr_pred = self.current_prediction[-(self.target + 1)]
@@ -138,6 +141,8 @@ class GenderSwitchAttackBaseline():
                         if (word_probs[index] > self.language_model_threshold*orig_word_prob):
                             curr_pred = predictions[index][-(self.target + 1)]
                             best = index
+                        else:
+                            print("Language model rejection.")
                     else:
                         curr_pred = predictions[index][-(self.target + 1)]
                         best = index
@@ -147,6 +152,8 @@ class GenderSwitchAttackBaseline():
                         if (word_probs[index] > self.language_model_threshold*orig_word_prob):
                             curr_pred = predictions[index][-(self.target + 1)]
                             best = index
+                        else:
+                            print("Language model rejection.")
                     else:
                         curr_pred = predictions[index][-(self.target + 1)]
                         best = index

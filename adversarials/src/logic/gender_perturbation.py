@@ -35,7 +35,8 @@ class GenderSwitchAttackBaseline():
         self.use_language_model = use_language_model
         self.language_model_threshold = 0.1
         self.language_model_context = 3
-        self.language_model = self._init_language_model()
+        if self.use_language_model:
+            self.language_model = self._init_language_model()
 
         self.target = None
         self.original_prediction = None
@@ -157,4 +158,4 @@ class GenderSwitchAttackBaseline():
         self.current_prediction = prediction
 
     def _init_language_model(self):
-        self.lm = LM()
+        return LM()

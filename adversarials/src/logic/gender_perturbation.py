@@ -2,6 +2,9 @@ from typing import List
 
 import numpy as np
 
+from src.utils.language_model.google_language_model import LM
+
+
 class GenderSwitchAttackGenetic():
     def __init__(self, model, samples, replacement_matrix,
                  population_size = 20, iterations = 100, use_language_model = False,
@@ -31,7 +34,8 @@ class GenderSwitchAttackBaseline():
 
         self.use_language_model = use_language_model
         self.language_model_threshold = 0.1
-        self.language_model_context = 1
+        self.language_model_context = 3
+        self.language_model = self._init_language_model()
 
         self.target = None
         self.original_prediction = None
@@ -151,3 +155,6 @@ class GenderSwitchAttackBaseline():
 
     def _set_curr_prediction(self, prediction):
         self.current_prediction = prediction
+
+    def _init_language_model(self):
+        self.lm = LM()

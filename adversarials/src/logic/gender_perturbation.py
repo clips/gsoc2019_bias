@@ -119,18 +119,37 @@ class GenderSwitchAttackBaseline():
 
     #With an input list of sentences, determine the one that best approaches the currently stored target
     def _select_best(self, sentence, position, words):
-        best = -1
         testers = [self._replace_at_pos(sentence, position, word) for word in words]
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
+        if self.use_language_model:
+            orig_word_prob = self.language_model.get_words_probs(sentence[:position-1], sentence[position])[0]
+            print(orig_word_prob)
+            word_probs = self.language_model.get_words_probs(sentence[:position-1], words)
+            print(word_probs)
+
+        best = -1
+        curr_pred = self.current_prediction[-(self.target + 1)]
         #The difference must be at least 5% for a change to be made
         for index in range(len(words)):
             if self.target < 0:
-                if(predictions[index][-(self.target + 1)] < self.current_prediction[-(self.target + 1)]*0.95):
-                    best = index
+                if(predictions[index][-(self.target + 1)] < curr_pred*0.95):
+                    if self.use_language_model:
+                        if (word_probs[index] > 0.1*orig_word_prob):
+                            curr_pred = predictions[index][-(self.target + 1)]
+                            best = index
+                    else:
+                        curr_pred = predictions[index][-(self.target + 1)]
+                        best = index
             else:
-                if(predictions[index][self.target] > self.current_prediction[self.target]*1.05):
-                    best = index
+                if(predictions[index][self.target] > curr_pred*1.05):
+                    if self.use_language_model:
+                        if (word_probs[index] > 0.1*orig_word_prob):
+                            curr_pred = predictions[index][-(self.target + 1)]
+                            best = index
+                    else:
+                        curr_pred = predictions[index][-(self.target + 1)]
+                        best = index
 
         if best != -1:
             return words[best], predictions[best]

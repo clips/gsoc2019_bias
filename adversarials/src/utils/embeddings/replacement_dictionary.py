@@ -44,5 +44,4 @@ class ReplacementDictionary:
                     self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
                 except Exception as e:
                     self.replacements[word] = []
-                    print(e)
         return self.replacements[word]

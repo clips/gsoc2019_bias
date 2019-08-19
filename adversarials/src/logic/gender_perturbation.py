@@ -123,7 +123,7 @@ class GenderSwitchAttackBaseline():
         predictions = [self.model.predict_one(' '.join(tester), plain = True) for tester in testers]
 
         #If there are no possible alternatives return
-        if len(words == 0):
+        if len(words) == 0:
             return None, None
 
         if self.use_language_model:

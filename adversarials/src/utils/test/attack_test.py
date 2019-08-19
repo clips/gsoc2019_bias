@@ -46,10 +46,10 @@ def load_replacements(inverse = False):
     print("Creating replacement matrix")
     if inverse:
         print("woman-man")
-        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, dynamic = True)
+        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True)
     else:
         print("man-woman")
-        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 3, dynamic = True)
+        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True)
 
 if __name__ == "__main__":
     svm, frame = load_dataset()

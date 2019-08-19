@@ -39,7 +39,7 @@ class ReplacementDictionary:
                     standard_replacements = [item[1] for item in
                                              get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)]
                     swap_replacements = [item[1] for item in
-                                         get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)]
+                                         get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit - 2)]
 
                     self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
                 except Exception as e:

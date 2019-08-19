@@ -135,7 +135,7 @@ class GenderSwitchAttackBaseline():
             if self.target < 0:
                 if(predictions[index][-(self.target + 1)] < curr_pred*0.95):
                     if self.use_language_model:
-                        if (word_probs[index] > 0.1*orig_word_prob):
+                        if (word_probs[index] > self.language_model_threshold*orig_word_prob):
                             curr_pred = predictions[index][-(self.target + 1)]
                             best = index
                     else:
@@ -144,7 +144,7 @@ class GenderSwitchAttackBaseline():
             else:
                 if(predictions[index][self.target] > curr_pred*1.05):
                     if self.use_language_model:
-                        if (word_probs[index] > 0.1*orig_word_prob):
+                        if (word_probs[index] > self.language_model_threshold*orig_word_prob):
                             curr_pred = predictions[index][-(self.target + 1)]
                             best = index
                     else:

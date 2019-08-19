@@ -57,5 +57,5 @@ if __name__ == "__main__":
     samples = frame["texts"].values.tolist()[110:160]
 
     print("Generating attack")
-    attack = GenderSwitchAttackBaseline(svm, samples, matrix)
+    attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=True)
     attack.attack_all()

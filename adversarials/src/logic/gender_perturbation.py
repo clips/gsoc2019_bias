@@ -27,14 +27,14 @@ class GenderSwitchAttackGenetic():
 
 class GenderSwitchAttackBaseline():
     def __init__(self, model, samples, replacement_matrix,
-                 use_language_model=False, language_model_threshold=0.1, language_model_contex=1):
+                 use_language_model=False, language_model_threshold=0.25, language_model_contex=5):
         self.model = model
         self.samples = samples
         self.replacement_matrix = replacement_matrix
 
         self.use_language_model = use_language_model
-        self.language_model_threshold = 0.1
-        self.language_model_context = 3
+        self.language_model_threshold = language_model_threshold
+        self.language_model_context = language_model_contex
         if self.use_language_model:
             self.language_model = self._init_language_model()
 

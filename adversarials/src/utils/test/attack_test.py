@@ -57,15 +57,25 @@ def load_samples():
     print(frame)
     return frame["texts"].values.tolist()
 
-def do_attack(svm, replacements, samples):
+def do_attack(svm, replacements, samples, use_lm = False):
     print("Generating attack")
-    attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=False)
+    attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=use_lm)
     attack.attack_all()
 
 if __name__ == "__main__":
     svm, frame = load_dataset()
     matrix = load_replacements()
+    matrix_inv = load_replacements(True)
     samples = load_samples()
     do_attack(svm, matrix, samples)
-    samples = frame["texts"].values.tolist()[1000:1020]
-    do_attack(svm, matrix, samples)
+    do_attack(svm, matrix_inv, samples)
+
+    samples_train = frame["texts"].values.tolist()[:100]
+    do_attack(svm, matrix, samples_train)
+    do_attack(svm, matrix_inv, samples_train)
+
+    do_attack(svm, matrix, samples, True)
+    do_attack(svm, matrix_inv, samples, True)
+
+    do_attack(svm, matrix, samples_train, True)
+    do_attack(svm, matrix_inv, samples_train, True)

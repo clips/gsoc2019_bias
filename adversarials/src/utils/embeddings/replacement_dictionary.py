@@ -7,7 +7,7 @@ from src.utils.embeddings.glove_utils import get_closest_words
 from sklearn.feature_extraction import stop_words
 
 class ReplacementDictionary:
-    def __init__(self, matrix, word_idx, add = None, minus = None, vocabulary = None, limit = 3, dynamic = True):
+    def __init__(self, matrix, word_idx, add = None, minus = None, vocabulary = None, limit = 4, dynamic = True):
         if minus is None:
             minus = []
         self.minus = minus
@@ -36,12 +36,10 @@ class ReplacementDictionary:
                 self.replacements[word] = []
             else:
                 try:
-                    standard_replacements = [item[1] for item in
-                                             get_closest_words(self.matrix, self.word_idx, [word], [], self.limit)]
                     swap_replacements = [item[1] for item in
-                                         get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit - 2)]
+                                         get_closest_words(self.matrix, self.word_idx, self.add + [word], self.minus, self.limit)]
 
-                    self.replacements[word] = [item for item in swap_replacements if item not in standard_replacements]
+                    self.replacements[word] = [item for item in swap_replacements if item != word]
                 except Exception as e:
                     self.replacements[word] = []
         return self.replacements[word]

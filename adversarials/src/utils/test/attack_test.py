@@ -51,11 +51,21 @@ def load_replacements(inverse = False):
         print("man-woman")
         return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True)
 
-if __name__ == "__main__":
-    svm, frame = load_dataset()
-    matrix = load_replacements()
-    samples = frame["texts"].values.tolist()[110:160]
+def load_samples():
+    print("Loading samples")
+    frame = pandas.read_csv(SAMPLES_PATH, sep="\t", header=None, names=["texts", "labels"], usecols=(0, 1))
+    print(frame)
+    return frame["texts"].values.tolist()
 
+def do_attack(svm, replacements, samples):
     print("Generating attack")
     attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=True)
     attack.attack_all()
+
+if __name__ == "__main__":
+    svm, frame = load_dataset()
+    matrix = load_replacements()
+    samples = load_samples()
+    do_attack(svm, matrix, samples)
+    samples = frame["texts"].values.tolist()[1000:1020]
+    do_attack(svm, matrix, samples)

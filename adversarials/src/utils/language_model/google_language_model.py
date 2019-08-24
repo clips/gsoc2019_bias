@@ -75,6 +75,8 @@ class LM(object):
         targets = np.zeros([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.int32)
         weights = np.ones([self.BATCH_SIZE, self.NUM_TIMESTEPS], np.float32)
 
+        prefix_words = prefix_words[-3:]
+
         if prefix_words.find('<S>') != 0:
             prefix_words = '<S> ' + prefix_words
 

@@ -29,7 +29,7 @@ def load_dataset():
 
     return svm, frame
 
-def load_replacements(inverse = False):
+def load_replacements():
     print("Loading dataset dictionary")
     dict, inv_dict = TwitterDataset(path=TWITTER_PATH, min_instances=5).get_dict()
     print(GLOVE_PATH)
@@ -44,12 +44,8 @@ def load_replacements(inverse = False):
     print("Words not found in embedding file: {}".format(len(not_found)))
 
     print("Creating replacement matrix")
-    if inverse:
-        print("woman-man")
-        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True)
-    else:
-        print("man-woman")
-        return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True)
+    return ReplacementDictionary(matrix, dict, add = ['woman'], minus = ['man'], vocabulary = None, limit = 5, dynamic = True),\
+           ReplacementDictionary(matrix, dict, add = ['man'], minus = ['woman'], vocabulary = None, limit = 5, dynamic = True)
 
 def load_samples():
     print("Loading samples")
@@ -64,8 +60,7 @@ def do_attack(svm, replacements, samples, use_lm = False):
 
 if __name__ == "__main__":
     svm, frame = load_dataset()
-    matrix = load_replacements()
-    matrix_inv = load_replacements(True)
+    matrix, matrix_inv = load_replacements()
     samples = load_samples()
     do_attack(svm, matrix, samples)
     do_attack(svm, matrix_inv, samples)

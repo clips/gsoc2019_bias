@@ -59,7 +59,7 @@ def load_samples():
 
 def do_attack(svm, replacements, samples):
     print("Generating attack")
-    attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=True)
+    attack = GenderSwitchAttackBaseline(svm, samples, matrix, use_language_model=False)
     attack.attack_all()
 
 if __name__ == "__main__":

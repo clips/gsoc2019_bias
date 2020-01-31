@@ -23,7 +23,7 @@ To function, the project does not require any access to the model parameters, bu
 
 ##### Embeddings and Alterations
 
-For the embedding implementation, the project includes loaders and functions that can load GLoVE formatted embedding files such as those found in https://nlp.stanford.edu/projects/glove/. For the purposes of generating the alterations, the 840B token/300  dimension embeddings where used. 
+For the embedding implementation, the project includes loaders and functions that can load GLoVE formatted embedding files such as those found in https://nlp.stanford.edu/projects/glove/. For the purposes of generating the alterations, the 840B token/300  dimension embeddings were used. 
 
 The alterations are stored in a dictionary where for each word, n words that comply with the required function in the embeddings space are stored. 
 
